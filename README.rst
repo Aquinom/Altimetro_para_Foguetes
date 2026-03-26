@@ -30,7 +30,7 @@ A proposta é implementar funcionalidades essenciais para o monitoramento do voo
 
 O desenvolvimento foi divido em quatro etapas:
 
-- Etapa 1 (02/04/2026): (breve resumo da etapa)
+- Etapa 1 (02/04/2026): Definição dos requisitos do projeto e dos periféricos que serão utilizados.
 - Etapa 2 (30/04/2026): (breve resumo da etapa)
 - Etapa 3 (28/05/2026): (breve resumo da etapa)
 - Etapa 4 (09/07/2026): (breve resumo da etapa)
