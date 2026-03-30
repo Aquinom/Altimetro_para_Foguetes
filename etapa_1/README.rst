@@ -16,7 +16,11 @@ A partir dessa definição, são realizadas a seleção e aquisição dos compon
 Desenvolvimento
 ***************
 
-Apresentar o desenvolvimento da etapa contendo detalhes de implementação (se houver) de hardware e software. Adicionar pesqusisas realizadas bem como testes realizados.
+O dispositivo sendo desenvolvido deve ser capaz de medir com confiança e precisão altidude do foguete, ser capaz de abrir um sistema de paraquedas e emitir um sinal sonoro para facilitar sua localização no solo após aterrisagem. Para garantir os requisitos de altitude, serão integrados múltiplos módulos com barômetros, o qual passará por um filtro digital de modo que a medida seja a mais correta possível. Será implementado um atuador mecânico, neste caso um servo motor, para abertura do paraquedas quando for detectado o momento certo. Os dados de um acelerômetro serão cruzados com o barômetro para detectar apogeu. Após a aterrisagem do foguete, um buzzer será acionado de forma intermitente oque facilitará encontrar o foguete. Para alimentar todos os sitemas, uma bateria leve será embarcada.
+
+Para auxiliar na seleção dos componentes de cada requisito, foi realizado uma pesquisa de alguns sensores e criado uma tabela para cada um que agrega os critérios de seleção mais importantes:
+
+
 
 
 Testes
