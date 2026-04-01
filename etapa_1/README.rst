@@ -31,7 +31,7 @@ Descrição dos testes/validações realizadas.
 
 Diagrama de blocos
 ================================
-.. image:: etapa_1/imagens/Diagrama de blocos-v2.png
+.. image:: imagens/Diagrama_de_blocos_v2.png
    :alt: Diagrama de blocos
    :align: center
    :width: 600px
