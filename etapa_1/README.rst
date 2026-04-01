@@ -31,7 +31,10 @@ Descrição dos testes/validações realizadas.
 
 Diagrama de blocos
 ================================
-![Diagrama_de_blocos_v2](https://github.com/Aquinom/Altimetro_para_Foguetes/blob/main/etapa_1/imagens/Diagrama%20de%20blocos-v2.png)
+.. image:: etapa_1/imagens/Diagrama de blocos-v2.png
+   :alt: Diagrama de blocos
+   :align: center
+   :width: 600px
 
 
 Referências (links/datasheets/livros)
