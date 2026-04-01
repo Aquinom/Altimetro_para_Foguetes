@@ -29,8 +29,9 @@ Testes
 Descrição dos testes/validações realizadas.
 
 
-(Outras subseções se necessário)
+Diagrama de blocos
 ================================
+![Diagrama_de_blocos_v2](https://github.com/Aquinom/Altimetro_para_Foguetes/blob/main/etapa_1/imagens/Diagrama%20de%20blocos-v2.png)
 
 
 Referências (links/datasheets/livros)
