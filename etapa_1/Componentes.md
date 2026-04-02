@@ -75,6 +75,23 @@ Pinos:
 
 ![BMP280](./etapa_1/imagens/BMP280.png)
 
+### Libraries:
+
+[ebrazedev](https://github.com/ebrezadev/BMP280-Barometric-Pressure-and-Temperature-Sensor-C-Driver/blob/main/example/linux/main.c)
+- Escrita em C puro (portável)
+- Compatível com ESP32 (ESP-IDF)
+- Suporte a I2C e SPI
+- Estrutura baseada em handle (estado do sensor)
+- Inclui cálculo de altitude
+- Possui tratamento de erros
+
+[Yenya](https://github.com/Yenya/avr-bmp280)
+- leitura de pressão e temperatura
+- cálculo de altitude
+- cálculo de taxa de subida (climb rate)
+- armazenamento de altitude máxima
+- (con) Vamos precisar adpatar o I2C
+- (con) Vamor precisar adpatar o delay
 ---
 
 ## Acelerômetro
@@ -100,6 +117,13 @@ Pinos:
 - INT → interrupção (opcional)  
 
 ![MPU6050](./etapa_1/imagens/MPU6050.png)
+
+### Libraries:
+
+[JRowberg MPU6050 (ESP-IDF)](https://github.com/jrowberg/i2cdevlib/tree/master/ESP32_ESP-IDF/components/MPU6050)
+- Comunicação via I2C (usando I2Cdev)
+- Leitura de acelerômetro e giroscópio (6 eixos)
+- Funções prontas para leitura de dados brutos e convertidos
 
 ---
 
