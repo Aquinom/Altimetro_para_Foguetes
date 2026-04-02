@@ -25,7 +25,7 @@ Pinos:
 - GND → terra  
 - S → sinal digital  
 
-![Módulo Buzzer 5V](./etapa_1/imagens/buzzer.png)
+![Módulo Buzzer 5V](.etapa_1/imagens/buzzer.png)
 
 ---
 
