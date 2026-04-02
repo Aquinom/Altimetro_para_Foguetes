@@ -91,7 +91,6 @@ Controle: I2C
 
 ### Funcionamento físico
 O acelerômetro funciona com base em estruturas microscópicas (MEMS) que se deslocam quando submetidas à aceleração. Esse deslocamento altera propriedades elétricas (como capacitância), permitindo medir aceleração nos eixos X, Y e Z.  
-O giroscópio mede a rotação utilizando o efeito Coriolis, detectando mudanças na orientação do sensor.
 
 Pinos:
 - VCC → alimentação  
