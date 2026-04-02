@@ -25,7 +25,7 @@ Pinos:
 - GND → terra  
 - S → sinal digital  
 
-![Módulo Buzzer 5V](.etapa_1/imagens/buzzer.png)
+![Módulo Buzzer 5V](imagens/buzzer.png)
 
 ---
 
@@ -48,7 +48,7 @@ Pinos:
 
 Observação: O controle é feito por largura de pulso (PWM), onde diferentes pulsos correspondem a diferentes ângulos.
 
-![SG90](./etapa_1/imagens/sg90.png)
+![SG90](imagens/sg90.png)
 
 ---
 
@@ -73,7 +73,7 @@ Pinos:
 - SCL → clock I2C  
 - SDA → dados I2C  
 
-![BMP280](./etapa_1/imagens/BMP280.png)
+![BMP280](imagens/BMP280.png)
 
 ### Libraries:
 
@@ -116,7 +116,7 @@ Pinos:
 - SDA → dados I2C  
 - INT → interrupção (opcional)  
 
-![MPU6050](./etapa_1/imagens/MPU6050.png)
+![MPU6050](imagens/MPU6050.png)
 
 ### Libraries:
 
