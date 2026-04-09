@@ -18,10 +18,8 @@ Para a etapa 2 serão realizadas as seguintes atividades:
 5. Esquemático preliminar
 6. Máquina de estados do firmware
 
-Segmentar as atividades desse modo vai permitir implementar e depurar de maneira individual, facilitando a integração final em etapas futuras. O item 5 visa elaborar o esquemático de uma PCB que vai integrar todos os módulos de sensores, incluindo dispositivos 
+Segmentar as atividades desse modo vai permitir implementar e depurar de maneira individual, facilitando a integração final em etapas futuras. O item 5 visa elaborar o esquemático de uma PCB que vai integrar todos os módulos de sensores, incluindo sistemas de proteção e regulação de energia. 
 
-
-O esquemático preliminar visa implementar os sensores em uma PCB
 
 Desenvolvimento
 ***************
