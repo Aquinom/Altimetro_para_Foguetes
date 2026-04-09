@@ -34,6 +34,9 @@ Testes
 
 Descrição dos testes/validações realizadas.
 
+Componentes
+======
+`Ver componentes <etapa_1/Componentes.md>`_
 
 Diagrama de blocos
 ================================
