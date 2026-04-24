@@ -24,7 +24,7 @@ Segmentar as atividades desse modo vai permitir implementar e depurar de maneira
 Desenvolvimento
 ***************
 
-Apresentar o desenvolvimento da etapa contendo detalhes de implementação (se houver) de hardware e software. Adicionar pesquisas realizadas bem como testes realizados.
+Para elaborar o esquemático e layout da PCB foi utilizado o software KiCAD 10.0.1; 
 
 
 Testes
@@ -40,6 +40,5 @@ Descrição dos testes/validações realizadas.
 Referências (links/datasheets/livros)
 *************************************
 
-- `nRF Connect SDK <https://developer.nordicsemi.com/nRF_Connect_SDK/doc/2.4.2/nrf/getting_started/modifying.html#configure-application>`_
-
+- `Tutorial I2C ESP32 <https://microcontrollerslab.com/esp32-i2c-communication-tutorial-arduino-ide>`_
 
