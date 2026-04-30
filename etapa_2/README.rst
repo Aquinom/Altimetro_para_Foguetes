@@ -32,7 +32,7 @@ Para elaborar a primeira versão da máquina de estados do firmware foi utilizad
 Testes
 ======
 
-`Teste 1: Buzzer </teste_buzzer>`_
+`Teste 1: Buzzer <teste_buzzer>`_
 
 Teste 2: Servomotor
 
