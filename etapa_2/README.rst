@@ -120,6 +120,8 @@ Descrição dos Estados
    :align: center
    :width: 600px
 
+os tempos anexados as "flags" de mudança de estado, são para fins de simulação apenas.
+
 
 ================================
 
