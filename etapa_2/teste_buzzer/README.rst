@@ -1,10 +1,12 @@
-Teste Buzzer -> Título
+Teste do Buzzer
+===============
 
+Inicialmente, nossa intenção é testar algumas funções (não todas) que serão utilizadas no projeto, além de estabelecer um ponto de partida para os próximos desenvolvimentos envolvendo o componente buzzer.
 
-Inicialmente nossa pretenção é testar algumas funções (não todas) que serão utilziadas no nosso projeto, bem como um start point para os próximos desenvolvimentos utilizando o componente em questão.
+No início, foram criadas duas funções principais para o teste:
 
-No inicio foram criadas duas funções de buzzer para o teste:
-- buzzer_1bip: Bip único para ser utilizado repetidamente duranta a "ultima fase" da máquina de estados, na qual um bip sonoro é emitido de tempos em tempos para encontrarmos o foguete.
-- buzzer_DoneInit: Sequencia de 3 Bips para identificar que a inicialização dos periféricos está pronta, e que podemos prosseguir com o lançamento. Será útilizado no estado de pré-lançamento.
+- **buzzer_1bip**: Emite um bip único. Essa função será utilizada repetidamente durante a *última fase* da máquina de estados, na qual um sinal sonoro é emitido periodicamente para auxiliar na localização do foguete.
 
-Para a elaboração foi utilizado o VS-CODE com a extensão do ESP-IDF.
+- **buzzer_DoneInit**: Emite uma sequência de três bips. Essa função indica que a inicialização dos periféricos foi concluída com sucesso e que o sistema está pronto para prosseguir com o lançamento. Será utilizada no estado de pré-lançamento.
+
+Para o desenvolvimento deste teste, foi utilizado o **VS Code** com a extensão do **ESP-IDF**.
