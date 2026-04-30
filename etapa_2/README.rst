@@ -131,4 +131,8 @@ Referências (links/datasheets/livros)
 
 - `Tutorial I2C ESP32 <https://microcontrollerslab.com/esp32-i2c-communication-tutorial-arduino-ide>`_
 - `Tutorial Itemis Create <https://www.itemis.com/en/products/itemis-create/documentation/tutorials>`_
+- `Documentação Espressif <https://docs.espressif.com/projects/esp-idf/en/latest/esp32/>`_
+- `Documentação LED-C utilizado para programar o SG90 <https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/peripherals/ledc.html>`_
+- `Documentação I2C utilizado para programar o MPU6050 <https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/peripherals/i2c.html>`_
+- `Exemplos de programação ESP32 Espressif <https://github.com/espressif/esp-idf/tree/master/examples>`_
 
