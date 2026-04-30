@@ -34,11 +34,11 @@ Testes
 
 `Teste 1: Buzzer <teste_buzzer>`_
 
-Teste 2: Servomotor
+`Teste 2: Servomotor <teste_servo>`_
 
-Teste 3: Acelerômetro
+`Teste 3: Acelerômetro <teste_acelerometro>`_
 
-Teste 4: Barômetro
+`Teste 4: Barômetro <teste_barometro>`_
 
 
 (Outras subseções se necessário)
