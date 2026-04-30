@@ -51,7 +51,9 @@ O tempo mínimo de operação desejado foi um valor estipulado em 4 horas graça
 
 Potência média (Pm) = Vs * As = 3,3 * 0,100 = 0,33W 
 
-Energia total com fator de correção (Et) = Vbat * Bc * Fc 
+Energia total com fator de correção (Et) = Vbat * Bc * Fc => 7,4 * 0,300 * 0,7 = 1,554 Wh
+
+Tempo mínimo de operação desejado (t) = Et / Pm => 1,554 / 0,33 = 4,7 Horas
 
 
 Para elaborar o esquemático e layout da PCB foi utilizado o software KiCAD 10.0.1; 
