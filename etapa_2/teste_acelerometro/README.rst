@@ -174,7 +174,7 @@ Teste.c
                    data.ax, data.ay, data.az, accel_mag);
 
             // ===============================
-            // LÓGICA FUTURA DE DISPARO
+            // Lógica futura de ativação do servo SG90 com barômetro e acelerômetro
             // ===============================
 
             if (!deploy_done)
@@ -182,15 +182,15 @@ Teste.c
                 // condição 1: baixa aceleração (~queda livre)
                 if (accel_mag < 0.3f)
                 {
-                    // TODO: substituir por leitura real do barômetro
+                    // Substituir por leitura real do barômetro
                     float pressure = last_pressure;
 
-                    // condição 2: pressão aumentando (descendo)
+                    // Se a pressão estiver aumentando (descendo)
                     if (pressure > last_pressure)
                     {
                         printf(">>> CONDIÇÃO DE DEPLOY DETECTADA <<<\n");
 
-                        // TODO: chamar servo_set_angle(180);
+                        // Chamar servo_set_angle(180) e ativar o paraquedas;
                         // servo_set_angle(180);
 
                         deploy_done = 1;
