@@ -26,11 +26,19 @@ Desenvolvimento
 
 Para elaborar o esquemático e layout da PCB foi utilizado o software KiCAD 10.0.1; 
 
+Para elaborar a primeira versão da máquina de estados do firmware foi utilizado o software Itemis Create.
+
 
 Testes
 ======
 
-Descrição dos testes/validações realizadas.
+Teste 1: Buzzer
+
+Teste 2: Servomotor
+
+Teste 3: Acelerômetro
+
+Teste 4: Barômetro
 
 
 (Outras subseções se necessário)
