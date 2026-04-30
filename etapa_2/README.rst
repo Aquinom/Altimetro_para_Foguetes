@@ -30,7 +30,34 @@ Para elaborar o esquemático e layout da PCB foi utilizado o software KiCAD 10.0
 Testes
 ======
 
-Descrição dos testes/validações realizadas.
+Um dos pontos que levantou preocupação no sistema de energia foi o alta queda de tensão (Vdropout) dos reguladores lineares presentes nos módulos de sensoriamento e no kit de desenvolvimento do microcontrolador, de modo que há uma queda de tensão mínima quando os valores de tensão da entrada e da saída estão muito próximos. Este pode ser um problema pois ao usar uma bateria 1s completamente carregada a tensão de alimentação dos componentes fica inferior a 3,3 Volts se a queda for superior a 0,9 Volts. Para verificar se este é um problema relevante foi elaborado uma placa de testes que é alimentada por uma fonte de bancada, uma pequena carga resistiva e dois multímetros, um deles medindo a tensão de entrada do regulador e outro a tensão sobre a carga. Os resultados deste teste podem ser observados na tabela abaixo:
+
+.. csv-table:: **Queda de Tensão Mínima entre Entrada e Saída**
+   :header: "Vin (V)", "Vout (V)", "Diferença (V)"
+   :widths: 10, 20, 20
+
+   "5", "3,3", "1,7"
+   "4,5", "3,3", "1,2"
+   "4,2", "3,1", "1,1"
+   "3,9", "2,8", "1,1"
+   "3,6", "2,5", "1,1"
+   "3,3", "2,2", "1,1"
+   "3,0", "1,9", "1,1"
+
+Podemos perceber que há uma diferença mínima de 1,1 Volts entre entrada e saída, valor dentro do esperado conforme o datasheet. Desse modo percebemos que não é possível alimentar diretamente a placa inteira com uma bateria 1s, por esse motivo foi escolhido usar uma bateria LiPo 2s com tensão nominal de 7,4 Volts. Para selecioanr corretamente uma bateria foi estipulado algumas diretrizes:
+
+* Tensão nominal da Bateria (Vbat): 7,4V
+* Tempo mínimo de operação desejado (t): 4 horas
+* Tensão nominal do sistema (Vs): 3,3V
+* Consumo médio do sistema (As): 100mA
+* Fator de correção (Fc): 0,7
+* Capacidade da bateria (Bc): valor a ser encontrado
+
+O tempo mínimo de operação desejado foi um valor estipulado em 4 horas graças a experiências prévias na Olimpíada Brasileira de Astronomia. O consumo médio de 100mA foi um valor arbitrário baseado no consumo do ESP32 quando alguns do periféricos que mais consomem forem desativados. Neste cálculo não foi levado em conta o consumo dos sensores pois tipicamente são muitos baixos, e também não foi calculado o consumo do servo motor que apesar de ser alto, será ativado apenas por um breve momento e depois permanecerá estático. O comsumo é um valor bem crítico para a seleção da bateria correta e se possível deve passar por uma revisão no futuro quando a placa estiver em estágio de testes. O fator de correção de 0,7 foi um valor arbritário usado como margem de segurança no consumo médio do sistema e também como margem de capacidade pois não vamos descarregar totalmente a bateria a fim de manter sua saúde. Com estes valores temos:
+
+Potência média (Pm) = Vs * As = 3,3 * 0,100 = 0,33W 
+
+Energia total com fator de correção (Et) = Vbat * Bc * Fc => Bc = Et/
 
 
 (Outras subseções se necessário)
