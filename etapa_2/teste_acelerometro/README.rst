@@ -3,7 +3,7 @@ Teste do acelerômetro MPU6050 com ESP32
 
 Teste do acelerômetro MPU6050 utilizando ESP32, em C com ESP-IDF.
 
-Conexões
+Conexões de hardware
 --------
 
 ESP32 DevKit:
