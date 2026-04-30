@@ -10,23 +10,13 @@ ESP32:
 
 - GPIO 18 → Sinal do servo (SG90)
 - GND → GND comum
+- VCC (5V) → Vermelho (VCC)
 
 Servo SG90:
 
-- Vermelho (VCC) → Saída 5V do regulador
+- Vermelho (VCC) → Saída 5V (ESP)
 - Marrom (GND) → GND comum
 - Laranja (Sinal) → GPIO 18
-
-Bateria 2S (7.4V):
-
-- Positivo → Entrada do regulador
-- Negativo → GND comum
-
-Regulador:
-
-- Entrada → Bateria 2S
-- Saída 5V → Servo
-- GND → GND comum (ESP32 + servo + bateria)
 
 
 Estrutura do Projeto
