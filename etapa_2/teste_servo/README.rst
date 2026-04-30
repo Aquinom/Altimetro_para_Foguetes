@@ -3,7 +3,7 @@ Teste do servo motor SG90 com ESP32
 
 Controle de servo realizado utilizando ESP32, em C com ESP-IDF.
 
-Conexões hardware
+Conexões de hardware
 --------
 
 ESP32:
