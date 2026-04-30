@@ -32,13 +32,13 @@ Para elaborar a primeira versão da máquina de estados do firmware foi utilizad
 Testes
 ======
 
-`Teste 1: Buzzer <teste_buzzer>`_
+Teste 1: Buzzer --> `clique aqui <teste_buzzer>`_
 
-`Teste 2: Servomotor <teste_servo>`_
+Teste 2: Servomotor --> `clique aqui <teste_servo>`_
 
-`Teste 3: Acelerômetro <teste_acelerometro>`_
+Teste 3: Acelerômetro --> `clique aqui <teste_acelerometro>`_
 
-`Teste 4: Barômetro <teste_barometro>`_
+Teste 4: Barômetro --> `clique aqui <teste_barometro>`_
 
 
 (Outras subseções se necessário)
