@@ -130,4 +130,5 @@ Referências (links/datasheets/livros)
 *************************************
 
 - `Tutorial I2C ESP32 <https://microcontrollerslab.com/esp32-i2c-communication-tutorial-arduino-ide>`_
+- `Tutorial Itemis Create <https://www.itemis.com/en/products/itemis-create/documentation/tutorials>`_
 
