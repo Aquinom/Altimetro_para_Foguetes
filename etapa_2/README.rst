@@ -76,6 +76,51 @@ Layout da PCB
 
 O esquemático e Layout da PCB se encontra abaixo...
 
+Máquina de Estados do Firmware
+======
+
+A máquina de estados do firmware é gerada com o auxílio da ferramenta *Itemis Create*.  
+Até o momento, foram definidos seis estados principais:
+
+- **PreLaunch**
+- **Launch**
+- **Flying**
+- **Peak**
+- **Dropping**
+- **FindMe**
+
+Descrição dos Estados
+---------------------
+
+**PreLaunch**
+   Estado responsável pela inicialização de todos os periféricos do sistema.
+
+**Launch**
+   Representa o momento de lançamento do foguete.  
+   Neste estado, são coletadas as primeiras medições do acelerômetro e do barômetro.
+
+**Flying**
+   Estado de voo. As leituras dos sensores são realizadas periodicamente.  
+   Este estado termina ao detectar o **Peak** (apogeu).
+
+**Peak**
+   Corresponde ao apogeu do voo.  
+   Responsável pelo acionamento do servo para abertura do paraquedas.
+
+**Dropping**
+   Estado de descida. As leituras dos sensores continuam sendo feitas periodicamente.  
+   Termina ao detectar a queda completa.
+
+**FindMe**
+   Estado final, no qual apenas o buzzer é acionado para facilitar a localização do foguete.  
+   É encerrado manualmente pelo usuário ao encontrar o dispositivo.
+
+.. image:: Imagens/Statechart.jpeg
+   :alt: Diagrama da máquina de estados do firmware
+   :align: center
+   :width: 600px
+
+
 ================================
 
 
