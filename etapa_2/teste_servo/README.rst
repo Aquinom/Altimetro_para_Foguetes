@@ -1,7 +1,7 @@
 Teste do servo motor SG90 com ESP32
 ==================================
 
-Controle de servo realizado utilizando ESP32, em C++ com ESP-IDF.
+Controle de servo realizado utilizando ESP32, em C com ESP-IDF.
 
 Estrutura do Projeto
 --------------------
@@ -9,20 +9,20 @@ Estrutura do Projeto
 ::
 
     main/
-     ├── main.cpp
+     ├── main.c
      ├── servo.h
-     ├── servo.cpp
+     ├── servo.c
      ├── teste.h
-     ├── teste.cpp
+     ├── teste.c
 
-Main.cpp
---------
+Main.c
+------
 
-.. code-block:: cpp
+.. code-block:: c
 
     #include "teste.h"
 
-    extern "C" void app_main(void)
+    void app_main(void)
     {
         teste_start();
     }
@@ -30,30 +30,23 @@ Main.cpp
 Servo.h
 -------
 
-.. code-block:: cpp
+.. code-block:: c
 
     #pragma once
 
     #include <stdint.h>
 
-    #ifdef __cplusplus
-    extern "C" {
-    #endif
-
     void servo_init(int gpio);
     void servo_set_angle(int angle);
 
-    #ifdef __cplusplus
-    }
-    #endif
+Servo.c
+-------
 
-Servo.cpp
----------
-
-.. code-block:: cpp
+.. code-block:: c
 
     #include "servo.h"
     #include "driver/ledc.h"
+    #include "esp_err.h"
 
     #define LEDC_TIMER        LEDC_TIMER_0
     #define LEDC_MODE         LEDC_LOW_SPEED_MODE
@@ -64,6 +57,7 @@ Servo.cpp
     #define SERVO_MIN_PULSEWIDTH_US 500
     #define SERVO_MAX_PULSEWIDTH_US 2500
     #define SERVO_MAX_DEGREE        180
+    #define SERVO_PERIOD_US         20000
 
     static int s_gpio = 18;
 
@@ -75,7 +69,7 @@ Servo.cpp
         uint32_t pulse_width = SERVO_MIN_PULSEWIDTH_US +
             (angle * (SERVO_MAX_PULSEWIDTH_US - SERVO_MIN_PULSEWIDTH_US)) / SERVO_MAX_DEGREE;
 
-        return (pulse_width * (1 << LEDC_DUTY_RES)) / 20000;
+        return (pulse_width * (1 << LEDC_DUTY_RES)) / SERVO_PERIOD_US;
     }
 
     void servo_init(int gpio)
@@ -89,7 +83,10 @@ Servo.cpp
             .freq_hz          = LEDC_FREQUENCY,
             .clk_cfg          = LEDC_AUTO_CLK
         };
-        ledc_timer_config(&timer);
+
+        if (ledc_timer_config(&timer) != ESP_OK) {
+            // erro na configuração do timer
+        }
 
         ledc_channel_config_t channel = {
             .gpio_num   = s_gpio,
@@ -100,7 +97,10 @@ Servo.cpp
             .duty       = 0,
             .hpoint     = 0
         };
-        ledc_channel_config(&channel);
+
+        if (ledc_channel_config(&channel) != ESP_OK) {
+            // erro na configuração do canal
+        }
     }
 
     void servo_set_angle(int angle)
@@ -111,10 +111,10 @@ Servo.cpp
         ledc_update_duty(LEDC_MODE, LEDC_CHANNEL);
     }
 
-Teste.cpp
----------
+Teste.c
+-------
 
-.. code-block:: cpp
+.. code-block:: c
 
     #include "teste.h"
     #include "servo.h"
@@ -125,7 +125,7 @@ Teste.cpp
 
     static void servo_test_task(void *arg)
     {
-        while (true)
+        while (1)
         {
             servo_set_angle(0);
             vTaskDelay(pdMS_TO_TICKS(2000));
@@ -155,16 +155,34 @@ Teste.cpp
 Teste.h
 -------
 
-.. code-block:: cpp
+.. code-block:: c
 
     #pragma once
 
-    #ifdef __cplusplus
-    extern "C" {
-    #endif
-
     void teste_start(void);
 
-    #ifdef __cplusplus
-    }
-    #endif
+Conexões hardware
+--------
+
+ESP32:
+
+- GPIO 18 → Sinal do servo (SG90)
+- GND → GND comum
+
+Servo SG90:
+
+- Vermelho (VCC) → Saída 5V do regulador
+- Marrom (GND) → GND comum
+- Laranja (Sinal) → GPIO 18
+
+Bateria 2S (7.4V):
+
+- Positivo → Entrada do regulador
+- Negativo → GND comum
+
+Regulador:
+
+- Entrada → Bateria 2S
+- Saída 5V → Servo
+- GND → GND comum (ESP32 + servo + bateria)
+
