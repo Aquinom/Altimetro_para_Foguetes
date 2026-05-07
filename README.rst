@@ -33,7 +33,7 @@ O desenvolvimento foi divido em quatro etapas:
 - Etapa 1 (02/04/2026): Definição dos requisitos do projeto e dos periféricos que serão utilizados.
 - Etapa 2 (30/04/2026): Obtenção e teste dos periféricos do projeto.
 - Etapa 3 (28/05/2026): Código funcional e integrado do projeto.
-- Etapa 4 (09/07/2026): Projeto final completo
+- Etapa 4 (09/07/2026): Projeto final funcional.
 
 Configuração
 *************
