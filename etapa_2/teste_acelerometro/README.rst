@@ -160,49 +160,7 @@ Teste.c
                      d->az * d->az);
     }
 
-    static void mpu_task(void *arg)
-    {
-        mpu6050_data_t data;
-
-        while (1)
-        {
-            mpu6050_read_accel(&data);
-
-            float accel_mag = calc_accel_magnitude(&data);
-
-            printf("AX: %.2f AY: %.2f AZ: %.2f | |A|: %.2f\n",
-                   data.ax, data.ay, data.az, accel_mag);
-
-            // ===============================
-            // Lógica futura de ativação do servo SG90 com barômetro e acelerômetro
-            // ===============================
-
-            if (!deploy_done)
-            {
-                // condição 1: baixa aceleração (~queda livre)
-                if (accel_mag < 0.3f)
-                {
-                    // Substituir por leitura real do barômetro
-                    float pressure = last_pressure;
-
-                    // Se a pressão estiver aumentando (descendo)
-                    if (pressure > last_pressure)
-                    {
-                        printf(">>> CONDIÇÃO DE DEPLOY DETECTADA <<<\n");
-
-                        // Chamar servo_set_angle(180) e ativar o paraquedas;
-                        // servo_set_angle(180);
-
-                        deploy_done = 1;
-                    }
-
-                    last_pressure = pressure;
-                }
-            }
-
-            vTaskDelay(pdMS_TO_TICKS(500));
-        }
-    }
+   
 
     void teste_start(void)
     {
