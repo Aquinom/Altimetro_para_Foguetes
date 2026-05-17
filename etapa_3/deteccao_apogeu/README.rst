@@ -1,1 +1,1 @@
-a
+Código provisório para detecção de apogeu somente com acelerômetro, assim que o filtro dos barômetros for aplicado, o mesmo será incluído na detecção do apogeu de modo que sejam utilizados os dois sensores na detecção.
