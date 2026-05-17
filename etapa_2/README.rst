@@ -137,4 +137,5 @@ Referências (links/datasheets/livros)
 - `Documentação LED-C utilizado para programar o SG90 <https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/peripherals/ledc.html>`_
 - `Documentação I2C utilizado para programar o MPU6050 <https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/peripherals/i2c.html>`_
 - `Exemplos de programação ESP32 Espressif <https://github.com/espressif/esp-idf/tree/master/examples>`_
+- `ESP32 as I2C Master <https://www.youtube.com/watch?v=Snp6iTu1R7E>`_
 
