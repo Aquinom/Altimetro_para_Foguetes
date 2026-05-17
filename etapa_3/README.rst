@@ -12,7 +12,7 @@ Visão geral
 Para a etapa 3 o desenvolvimento se resume em 4 sub-entregas:
 
 * Estimativa inicial de altura com filtro simples
-* Implementação inicial do algoritmo inicial de detecção de subida
+* Implementação inicial do algoritmo de detecção de subida
 * Revisão do esquemático e layout preliminar
 * Ajustes de hardware e integração
 
