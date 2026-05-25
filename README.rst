@@ -20,12 +20,12 @@ Este projeto foi implementado com os seguintes módulos/softwares/hardwares...
 Visão geral
 ***********
 
-Este projeto tem como objetivo desenvolver um módulo do sistema de telemetria do foguete criado pela Professora Paula Borges Monteiro.
+Este projeto tem como objetivo desenvolver um módulo do sistema de telemetria para a categoria de foguetes com telemetria e paraquedas da Olimpíada Brasileira de Foguetes (OBAFOG).
 
 A proposta é implementar funcionalidades essenciais para o monitoramento do voo e recuperação do foguete, incluindo:
 
 - Medição da altitude máxima atingida;
-- Detecção do início da descida com acionamento automático do paraquedas;
+- Acionamento automático do paraquedas;
 - Ativação de um buzzer após o pouso para facilitar a localização.
 
 O desenvolvimento foi divido em quatro etapas:
