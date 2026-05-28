@@ -22,8 +22,6 @@ O primeiro item se resume em criar o algoritmo de estimativa de altura com filtr
 Desenvolvimento
 ***************
 
-Apresentar o desenvolvimento da etapa contendo detalhes de implementação (se houver) de hardware e software. Adicionar pesqusisas realizadas bem como testes realizados.
-
 Para fazer uma estimativa inicial de altura é necessário implementar um algoritmo que pega o valor inicial de pressão dos três barômetros e utiliza como zero, e em seguida pegar o valor de pressão no apogeu, faz a subtração dos valores e converte para metros para obter a altitude acima do nível do solo. Podemos melhorar essa leitura implementado um simples filtro e retirando barômetros que deem valores muitos dicrepantes entre si. Um exemplo de implementação é o filtro média móvel e atribuição de pesos para cada barômetro. Para ter certeza que a medida obtida é coerente, primeiro devemos comparar com um valor de altitude conhecido ou com outro sensor que seja confiável. Devemos tomar muito cuidado na implementação do filtro para que ele não seja lento demais ou que seja ruidoso demais.
 
 Também percebemos a necessidade da implementação de outro algoritmo para detectar a subida do foguete e detecção de apogeu. Isso será feito utilizando os dados do acelerômetro e do barômetro e criando um algoritmo que cruza ambos os dados. O lançamento de um foguete possui uma curva típica de Aceleração x Tempo conforme podemos ver abaixo:
