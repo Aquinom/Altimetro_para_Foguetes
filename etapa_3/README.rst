@@ -38,14 +38,14 @@ Detecção de apogeu
 
 Segue abaixo o link para acesso ao código de detecção de apogeu desenvolvido durante esta etapa
 
-`Detecção de apogeu <https://github.com/Aquinom/Altimetro_para_Foguetes/tree/main/etapa_3/deteccao_apogeu>`_
+`Detecção de apogeu <deteccao_apogeu>`_
 
 Filtro barômetros
 ======
 
 Segue abaixo o link para acesso ao código do filtro dos barômetros desenvolvido durante esta etapa
 
-`Filtro barometros <https://github.com/Aquinom/Altimetro_para_Foguetes/tree/main/etapa_3/deteccao_apogeu>`_
+`Filtro barometros <filtro_bar>`_
 
 
 Referências (links/datasheets/livros)
