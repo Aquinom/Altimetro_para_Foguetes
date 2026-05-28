@@ -61,7 +61,7 @@ No momento, os sensores do sistema foram simulados gerando valores aleatórios.
 
 Os códigos para replicação dos testes também estão disponíveis no link abaixo.
 
-`IntegracaoV1 <PCB>`_
+`IntegracaoV1 <Integracao_V1>`_
 
 Referências (links/datasheets/livros)
 *************************************
