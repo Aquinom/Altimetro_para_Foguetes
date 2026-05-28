@@ -33,14 +33,19 @@ Criar um algoritmo de detecção de lançamento pode levar em contas estas mesma
 A primeira versão do equemático e da PCB passarão por uma revisão minuciosa de forma a identificar problemas e corrigi-los antes de produzir a PCB. Nesta etapa ainda é posssível fazer modificações de hardware como implementação de mais circuitos e verificar se as escolhas de sensores e atuadores foram adequadas. Foi observado que há a necessidade de um conversor para o servo motor pois o servo SG90 utilizado é tolerante até 6V. A tensão de operação da bateria 2S vai ficar entre 6,6V e 8,4V; desse modo fica evidente a necessidade desta modificação. Outro ponto de implementação é um footprint modificado para os módulos.
 
 
-Testes
+Detecção de apogeu
 ======
 
-Descrição dos testes/validações realizadas.
+Segue abaixo o link para acesso ao código de detecção de apogeu desenvolvido durante esta etapa
 
+`Detecção de apogeu <https://github.com/Aquinom/Altimetro_para_Foguetes/tree/main/etapa_3/deteccao_apogeu>`_
 
-(Outras subseções se necessário)
-================================
+Filtro barômetros
+======
+
+Segue abaixo o link para acesso ao código do filtro dos barômetros desenvolvido durante esta etapa
+
+`Filtro barometros <https://github.com/Aquinom/Altimetro_para_Foguetes/tree/main/etapa_3/deteccao_apogeu>`_
 
 
 Referências (links/datasheets/livros)
