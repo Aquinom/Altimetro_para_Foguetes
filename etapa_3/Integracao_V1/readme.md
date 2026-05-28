@@ -19,7 +19,6 @@ Atualmente o sistema possui tasks para:
 * Simulação do acelerômetro
 * Simulação do barômetro
 * Detecção de pico
-* Controle do buzzer
 
 ---
 
