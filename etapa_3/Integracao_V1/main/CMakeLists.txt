@@ -1,0 +1,11 @@
+idf_component_register(
+    SRCS
+        "main.c"
+        "callback.c"
+        "buzzer.c"
+        "faketasks.c"
+        "src-gen/statechart.c"
+    INCLUDE_DIRS
+        "."
+        "src-gen"
+)
