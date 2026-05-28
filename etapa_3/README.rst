@@ -52,6 +52,17 @@ Abaixo temos o link que leva para o projeto KiCAD, esquemático em PDF e imagens
 
 `Projeto da PCB <PCB>`_
 
+Integração Versão 1
+======
+
+Abaixo temos o link que leva para a parte de projeto onde foram executados os testes de integração. Foi utilizado em conjunto com a máquina de estados gerada pelo Itemis Create, o FreeRtos como sistema operacional de tempo real para manipulação e gerenciamento das tasks do nosso sistema.
+
+No momento, os sensores do sistema foram simulados gerando valores aleatórios.
+
+Os códigos para replicação dos testes também estão disponíveis no link abaixo.
+
+`IntegracaoV1 <PCB>`_
+
 Referências (links/datasheets/livros)
 *************************************
 
