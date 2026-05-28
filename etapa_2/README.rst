@@ -70,7 +70,7 @@ Teste 2: Servomotor --> `clique aqui <teste_servo>`_
 
 Teste 3: Acelerômetro --> `clique aqui <teste_acelerometro>`_
 
-Teste 4: Barômetro --> `clique aqui <teste_barometro>`_
+Teste 4: Barômetro --> `clique aqui <teste_bar>`_
 
 
 Layout da PCB
