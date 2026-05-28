@@ -45,6 +45,12 @@ Segue abaixo o link para acesso ao código do filtro dos barômetros desenvolvid
 
 `Filtro barometros <filtro_barometros>`_
 
+Esquemático e Layout da Placa
+======
+
+Abaixo temos o link que leva para o projeto KiCAD, esquemático em PDF e imagens do layout final da PCB.
+
+`Projeto da PCB <PCB>`_
 
 Referências (links/datasheets/livros)
 *************************************
