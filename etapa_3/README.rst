@@ -51,7 +51,6 @@ Segue abaixo o link para acesso ao código do filtro dos barômetros desenvolvid
 Referências (links/datasheets/livros)
 *************************************
 
-- `nRF Connect SDK <https://developer.nordicsemi.com/nRF_Connect_SDK/doc/2.4.2/nrf/getting_started/modifying.html#configure-application>`_
 - `Tutorial I2C ESP32 <https://microcontrollerslab.com/esp32-i2c-communication-tutorial-arduino-ide>`_
 - `Tutorial Itemis Create <https://www.itemis.com/en/products/itemis-create/documentation/tutorials>`_
 - `Documentação Espressif <https://docs.espressif.com/projects/esp-idf/en/latest/esp32/>`_
