@@ -31,7 +31,7 @@ Podemos perceber que todos os modelos de acelerômetro possuem faixas de mediç�
 
 Componentes
 ======
-`Ver componentes <etapa_1/Componentes.md>`_
+`Ver componentes <Componentes.rst>`_
 
 Diagrama de blocos
 ================================
