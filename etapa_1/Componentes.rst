@@ -56,7 +56,7 @@ Pinos:
 Observação: o controle é feito por largura de pulso (PWM), em que diferentes
 pulsos correspondem a diferentes ângulos.
 
-.. image:: imagens/sg90.png
+.. image:: imagens/SG90.png
    :alt: SG90
 
 
