@@ -1,17 +1,13 @@
-Breve estudo dos componentes
-============================
-
-Sumário
--------
+Componentes
+###########
 
 .. contents::
    :local:
    :depth: 2
 
 
-
 Buzzer
-***********
+******
 
 Componente escolhido: Módulo Buzzer Ativo YL-44
 
@@ -65,7 +61,7 @@ pulsos correspondem a diferentes ângulos.
 
 
 Barômetro
-***********
+*********
 
 Componente escolhido: BMP280
 
@@ -78,8 +74,9 @@ Alimentação: 3,3V
 
 Controle: I2C
 
+
 Funcionamento físico
-======
+====================
 
 O BMP280 utiliza um sensor piezoresistivo. A pressão do ar deforma uma
 membrana microscópica interna, alterando sua resistência elétrica. Essa
@@ -98,7 +95,7 @@ Pinos:
 
 
 Bibliotecas
-======
+===========
 
 `ebrazedev <https://github.com/ebrezadev/BMP280-Barometric-Pressure-and-Temperature-Sensor-C-Driver/blob/main/example/linux/main.c>`_
 
@@ -120,7 +117,7 @@ Bibliotecas
 
 
 Acelerômetro
-***********
+************
 
 Componente escolhido: MPU6050
 
@@ -133,8 +130,9 @@ Alimentação: 3,3V
 
 Controle: I2C
 
+
 Funcionamento físico
-======
+====================
 
 O acelerômetro funciona com base em estruturas microscópicas (MEMS) que se
 deslocam quando submetidas à aceleração. Esse deslocamento altera
@@ -154,7 +152,7 @@ Pinos:
 
 
 Bibliotecas
-======
+===========
 
 `JRowberg MPU6050 (ESP-IDF) <https://github.com/jrowberg/i2cdevlib/tree/master/ESP32_ESP-IDF/components/MPU6050>`_
 
