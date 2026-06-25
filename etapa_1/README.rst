@@ -29,11 +29,6 @@ Para a seleção dos barômetros foram selecionados 6 modelos disponíveis no me
 Podemos perceber que todos os modelos de acelerômetro possuem faixas de medição de aceleração, tensão de operação e protocolo de comunicação iguais. Com isso em mente parâmetros que definem a escolha do sensor passam a ser disponibilidade no mercado, SNR, disponibilidade de bibliotecas e custo. O modelo MPU6050 foi selecionado por ter um custo menor que os outros, muitas bibliotecas disponíveis e ser de fácil aquisição no mercado nacional, entretanto muito cuidado deve ser tomado com seus dados pois são sucetíveis a ruído, desse modo ficando evidente a necessidade de implementação de algum método de filtragem.
 
 
-Testes
-======
-
-Descrição dos testes/validações realizadas.
-
 Componentes
 ======
 `Ver componentes <etapa_1/Componentes.md>`_
