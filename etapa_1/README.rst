@@ -1,162 +1,53 @@
-Breve estudo dos componentes
-============================
-
-Sumário
--------
+Etapa 1
+#######
 
 .. contents::
    :local:
    :depth: 2
 
 
-Buzzer
-******
+Visão geral
+***********
 
-Componente escolhido: Módulo Buzzer Ativo YL-44
+A Etapa 1 tem como objetivo estruturar os requisitos do projeto, de modo a definir a escolha dos componentes que atendam às necessidades do projeto.
 
-Alimentação: 3,3 ~ 5V
+A partir dessa definição, são realizadas a seleção e aquisição dos componentes, bem como a pesquisa das bibliotecas necessárias para o desenvolvimento. Além disso, esta etapa contempla o estudo dos sensores envolvidos e a elaboração de um diagrama de blocos simples, servindo como base para as próximas fases do projeto.
 
-Controle: High / Low
+Desenvolvimento
+***************
 
-Destacando que a diferença de um buzzer passivo para um ativo é que, com
-um buzzer passivo, conseguimos fazê-lo emitir diferentes tons variando a
-frequência. Já com o buzzer ativo, conseguimos apenas fazê-lo apitar ou não
-apitar.
+O dispositivo sendo desenvolvido deve ser capaz de medir com confiança e precisão altitude do foguete, ser capaz de abrir um sistema de paraquedas e emitir um sinal sonoro para facilitar sua localização no solo após aterrisagem. Para garantir os requisitos de altitude, serão integrados múltiplos módulos com barômetros, o qual passará por um filtro digital de modo que a medida seja a mais correta possível. Será implementado um atuador mecânico, neste caso um servo motor, para abertura do paraquedas quando for detectado o momento certo. Os dados de um acelerômetro serão cruzados com o barômetro para detectar apogeu. Após a aterrisagem do foguete, um buzzer será acionado de forma intermitente que facilitará encontrar o foguete. Para alimentar todos os sitemas, uma bateria leve será embarcada.
 
-Como, para o projeto em questão, a função do buzzer será apenas identificar
-a localidade do foguete após a queda, o buzzer ativo é suficiente para essa
-função.
+Para auxiliar na seleção dos componentes de cada requisito, foi realizado uma pesquisa de alguns sensores e criado uma tabela para cada um que agrega os critérios de seleção mais importantes:
 
-Pinos:
+.. image:: imagens/tabela_barometro.png
 
-* VCC → alimentação
-* GND → terra
-* S → sinal digital
+Para a seleção dos barômetros foram selecionados 6 modelos disponíveis no mercado nacional e internacional. Dado o prazo de implementação e a disponibilidade no mercado nacional, disponibilidade de bibliotecas e acurácia boa para esta aplicação, foi selecionado o sensor BMP280 para o projeto. Para a implementação do giroscópio analisamos 4 modelos conforme podemos na tabela abaixo:
 
-.. image:: imagens/buzzer.png
-   :alt: Módulo Buzzer 5V
+.. image:: imagens/tabela_acelerometro.jpg
+
+Podemos perceber que todos os modelos de acelerômetro possuem faixas de medição de aceleração, tensão de operação e protocolo de comunicação iguais. Com isso em mente parâmetros que definem a escolha do sensor passam a ser disponibilidade no mercado, SNR, disponibilidade de bibliotecas e custo. O modelo MPU6050 foi selecionado por ter um custo menor que os outros, muitas bibliotecas disponíveis e ser de fácil aquisição no mercado nacional, entretanto muito cuidado deve ser tomado com seus dados pois são sucetíveis a ruído, desse modo ficando evidente a necessidade de implementação de algum método de filtragem.
 
 
-Servomotor
-**********
+Componentes
+======
+`Ver componentes <etapa_1/Componentes.md>`_
 
-Componente escolhido: SG90
-
-Micro servomotor que controla a posição angular de 0° a 180°.
-
-A função do servomotor será abrir o paraquedas após o apogeu.
-
-Alimentação: 5V
-
-Controle: PWM
-
-Pinos:
-
-* VCC (vermelho) → alimentação
-* GND (marrom) → terra
-* Signal (laranja) → sinal PWM
-
-Observação: o controle é feito por largura de pulso (PWM), em que diferentes
-pulsos correspondem a diferentes ângulos.
-
-.. image:: imagens/sg90.png
-   :alt: SG90
+Diagrama de blocos
+================================
+.. image:: imagens/Diagrama_de_blocos_v2.png
+   :alt: Diagrama de blocos
+   :align: center
+   :width: 600px
 
 
-Barômetro
-*********
+Referências (links/datasheets/livros)
+*************************************
 
-Componente escolhido: BMP280
-
-Sensor de pressão e temperatura.
-
-Terá como função calcular a altitude com base na variação da pressão
-atmosférica.
-
-Alimentação: 3,3V
-
-Controle: I2C
-
-Funcionamento físico
----------
-
-O BMP280 utiliza um sensor piezoresistivo. A pressão do ar deforma uma
-membrana microscópica interna, alterando sua resistência elétrica. Essa
-variação é convertida em sinal digital. Como a pressão atmosférica diminui
-com o aumento da altitude, é possível calcular a altura do foguete.
-
-Pinos:
-
-* VCC → alimentação
-* GND → terra
-* SCL → clock I2C
-* SDA → dados I2C
-
-.. image:: imagens/BMP280.png
-   :alt: BMP280
-
-
-Bibliotecas
------------
-
-`ebrazedev <https://github.com/ebrezadev/BMP280-Barometric-Pressure-and-Temperature-Sensor-C-Driver/blob/main/example/linux/main.c>`_
-
-* Escrita em C puro e portável.
-* Compatível com ESP32 (ESP-IDF).
-* Suporte a I2C e SPI.
-* Estrutura baseada em handle, responsável pelo estado do sensor.
-* Inclui cálculo de altitude.
-* Possui tratamento de erros.
-
-`Yenya <https://github.com/Yenya/avr-bmp280>`_
-
-* Leitura de pressão e temperatura.
-* Cálculo de altitude.
-* Cálculo de taxa de subida (climb rate).
-* Armazenamento de altitude máxima.
-* Será necessário adaptar o I2C.
-* Será necessário adaptar o delay.
-
-
-Acelerômetro
-************
-
-Componente escolhido: MPU6050
-
-Sensor que combina acelerômetro e giroscópio (6 eixos).
-
-Será utilizado para detectar movimento, aceleração e possível identificação
-do apogeu do foguete.
-
-Alimentação: 3,3V
-
-Controle: I2C
-
-Funcionamento físico
---------------------
-
-O acelerômetro funciona com base em estruturas microscópicas (MEMS) que se
-deslocam quando submetidas à aceleração. Esse deslocamento altera
-propriedades elétricas, como a capacitância, permitindo medir aceleração nos
-eixos X, Y e Z.
-
-Pinos:
-
-* VCC → alimentação
-* GND → terra
-* SCL → clock I2C
-* SDA → dados I2C
-* INT → interrupção (opcional)
-
-.. image:: imagens/MPU6050.png
-   :alt: MPU6050
-
-
-Bibliotecas
------------
-
-`JRowberg MPU6050 (ESP-IDF) <https://github.com/jrowberg/i2cdevlib/tree/master/ESP32_ESP-IDF/components/MPU6050>`_
-
-* Comunicação via I2C utilizando I2Cdev.
-* Leitura de acelerômetro e giroscópio (6 eixos).
-* Funções prontas para leitura de dados brutos e convertidos.
+- `nRF Connect SDK <https://developer.nordicsemi.com/nRF_Connect_SDK/doc/2.4.2/nrf/getting_started/modifying.html#configure-application>`_
+- `BMP180 Datasheet <https://cdn-shop.adafruit.com/datasheets/BST-BMP180-DS000-09.pdf>`_
+- `BMP280 Datasheet <https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bmp280-ds001.pdf>`_
+- `BMP388 Datasheet <https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bmp388-ds001.pdf>`_
+- `DPS310 Datasheet <https://br.mouser.com/pdfdocs/Infineon-DPS310-DS-v01_00-EN2.pdf>`_
+- `DPS368 Datasheet <https://www.infineon.com/assets/row/public/documents/24/49/infineon-dps368-datasheet-en.pdf>`_
+- `Adafruit BMP280 Sensor Overview <https://cdn-learn.adafruit.com/downloads/pdf/adafruit-bmp280-barometric-pressure-plus-temperature-sensor-breakout.pdf>`_
