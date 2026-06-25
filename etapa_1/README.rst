@@ -35,6 +35,21 @@ Componentes
 
 Diagrama de blocos
 ================================
+
+O diagrama de blocos apresenta a arquitetura elétrica e de comunicação do sistema embarcado no foguete.
+
+
+A bateria LiPo 1S é responsável por fornecer alimentação para todos os componentes do sistema, incluindo o microcontrolador, os três barômetros, o acelerômetro com giroscópio, o servomotor e o buzzer.
+
+
+O microcontrolador central (MCC) é responsável por processar os dados dos sensores e controlar os atuadores. Os três barômetros são conectados ao MCC por meio de dois barramentos I2C. Essa redundância de sensores permite obter medições de altitude mais confiáveis.
+
+
+O acelerômetro e giroscópio também se comunicam com o MCC por meio do barramento I2C. Os dados desse sensor são utilizados em conjunto com os dados dos barômetros para auxiliar na identificação do apogeu do foguete.
+
+
+O servomotor é controlado pelo MCC por um sinal PWM e será utilizado para acionar o mecanismo de abertura do paraquedas. Já o buzzer é acionado por um sinal digital do tipo High/Low, emitindo alertas sonoros após a aterrissagem para facilitar a localização do foguete.
+
 .. image:: imagens/Diagrama_de_blocos_v2.png
    :alt: Diagrama de blocos
    :align: center
