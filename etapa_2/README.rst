@@ -9,60 +9,93 @@ Etapa 2
 Visão geral
 ***********
 
-Para a etapa 2 serão realizadas as seguintes atividades:
+A Etapa 2 tem como objetivo validar individualmente os principais periféricos do sistema embarcado, permitindo que cada módulo seja desenvolvido e testado antes da integração completa do hardware e do firmware.
 
-1. Comunicação com o barômetro usando microcontrolador
-2. Comunicação com o acelerômetro usando microcontrolador
-3. Acionamento do buzzer usando microcontrolador
-4. Acionamento do servo-motor usando microcontrolador
-5. Esquemático preliminar
-6. Máquina de estados do firmware
+As atividades previstas nesta etapa são:
 
-Segmentar as atividades desse modo vai permitir implementar e depurar de maneira individual, facilitando a integração final em etapas futuras. O item 5 visa elaborar o esquemático de uma PCB que vai integrar todos os módulos de sensores, incluindo sistemas de proteção e regulação de energia. 
+1. Comunicação com o barômetro utilizando o microcontrolador;
+2. Comunicação com o acelerômetro utilizando o microcontrolador;
+3. Acionamento do buzzer;
+4. Acionamento do servomotor;
+5. Desenvolvimento do esquemático preliminar da PCB;
+6. Desenvolvimento da primeira versão da máquina de estados do firmware.
 
+A implementação individual dos módulos reduz a complexidade da depuração e permite validar cada componente separadamente antes da montagem do sistema completo.
+
+Além disso, esta etapa contempla o desenvolvimento inicial do esquemático da placa eletrônica, responsável por integrar todos os sensores, atuadores e circuitos de alimentação.
 
 Desenvolvimento
 ***************
 
-Um dos pontos que levantou preocupação no sistema de energia foi o alta queda de tensão (Vdropout) dos reguladores lineares presentes nos módulos de sensoriamento e no kit de desenvolvimento do microcontrolador, de modo que há uma queda de tensão mínima quando os valores de tensão da entrada e da saída estão muito próximos. Este pode ser um problema pois ao usar uma bateria 1s completamente carregada a tensão de alimentação dos componentes fica inferior a 3,3 Volts se a queda for superior a 0,9 Volts. Para verificar se este é um problema relevante foi elaborado uma placa de testes que é alimentada por uma fonte de bancada, uma pequena carga resistiva e dois multímetros, um deles medindo a tensão de entrada do regulador e outro a tensão sobre a carga. Os resultados deste teste podem ser observados na tabela abaixo:
+Durante o desenvolvimento do sistema foi identificada uma possível limitação relacionada à alimentação elétrica dos módulos utilizados. Os sensores e a placa de desenvolvimento empregam reguladores lineares de tensão que apresentam uma tensão mínima de operação (dropout voltage), fazendo com que a tensão de saída diminua quando a tensão de entrada se aproxima da tensão nominal de saída.
 
-.. csv-table:: **Queda de Tensão Mínima entre Entrada e Saída**
+Como o projeto previa inicialmente a utilização de uma bateria LiPo 1S (3,7 V nominal), tornou-se necessário verificar experimentalmente se a tensão disponível seria suficiente para alimentar todo o sistema.
+
+Para essa avaliação foi montada uma bancada composta por uma fonte de alimentação regulável, uma carga resistiva e dois multímetros digitais. Um multímetro foi utilizado para medir a tensão de entrada do regulador, enquanto o segundo monitorou a tensão de saída sobre a carga.
+
+Os resultados obtidos são apresentados na **Tabela 1**.
+
+.. csv-table:: **Tabela 1 – Queda de tensão entre entrada e saída do regulador**
    :header: "Vin (V)", "Vout (V)", "Diferença (V)"
-   :widths: 10, 20, 20
+   :widths: 10,20,20
 
-   "5", "3,3", "1,7"
-   "4,5", "3,3", "1,2"
-   "4,2", "3,1", "1,1"
-   "3,9", "2,8", "1,1"
-   "3,6", "2,5", "1,1"
-   "3,3", "2,2", "1,1"
-   "3,0", "1,9", "1,1"
+   "5","3,3","1,7"
+   "4,5","3,3","1,2"
+   "4,2","3,1","1,1"
+   "3,9","2,8","1,1"
+   "3,6","2,5","1,1"
+   "3,3","2,2","1,1"
+   "3,0","1,9","1,1"
 
-Podemos perceber que há uma diferença mínima de 1,1 Volts entre entrada e saída, valor dentro do esperado conforme o datasheet. Desse modo percebemos que não é possível alimentar diretamente a placa inteira com uma bateria 1s, por esse motivo foi escolhido usar uma bateria LiPo 2s com tensão nominal de 7,4 Volts. Para selecioanr corretamente uma bateria foi estipulado algumas diretrizes:
+Os resultados mostram uma tensão mínima de aproximadamente 1,1 V entre entrada e saída, valor compatível com o especificado pelo fabricante do regulador utilizado.
 
-* Tensão nominal da Bateria (Vbat): 7,4V
-* Tempo mínimo de operação desejado (t): 4 horas
-* Tensão nominal do sistema (Vs): 3,3V
-* Consumo médio do sistema (As): 100mA
-* Fator de correção (Fc): 0,7
-* Capacidade da bateria (Bc): valor a ser encontrado
+Assim, conclui-se que uma bateria LiPo 1S não seria capaz de manter tensão suficiente durante toda sua faixa de descarga. Em função disso, foi adotada uma bateria LiPo 2S, com tensão nominal de 7,4 V.
 
-O tempo mínimo de operação desejado foi um valor estipulado em 4 horas graças a experiências prévias na Olimpíada Brasileira de Astronomia. O consumo médio de 100mA foi um valor arbitrário baseado no consumo do ESP32 quando alguns do periféricos que mais consomem forem desativados. Neste cálculo não foi levado em conta o consumo dos sensores pois tipicamente são muitos baixos, e também não foi calculado o consumo do servo motor que apesar de ser alto, será ativado apenas por um breve momento e depois permanecerá estático. O comsumo é um valor bem crítico para a seleção da bateria correta e se possível deve passar por uma revisão no futuro quando a placa estiver em estágio de testes. O fator de correção de 0,7 foi um valor arbritário usado como margem de segurança no consumo médio do sistema e também como margem de capacidade pois não vamos descarregar totalmente a bateria a fim de manter sua saúde. Com estes valores temos:
+Para dimensionar a capacidade mínima da bateria foram definidos os seguintes parâmetros de projeto:
 
-Potência média (Pm) = Vs * As = 3,3 * 0,100 = 0,33W 
+* Tensão nominal da bateria: 7,4 V
+* Tempo mínimo de operação: 4 h
+* Tensão do sistema: 3,3 V
+* Corrente média estimada: 100 mA
+* Fator de segurança: 0,7
 
-Energia total com fator de correção (Et) = Vbat * Bc * Fc => 7,4 * 0,300 * 0,7 = 1,554 Wh
+A potência média do sistema é dada por:
 
-Tempo mínimo de operação desejado (t) = Et / Pm => 1,554 / 0,33 = 4,7 Horas
+::
 
+   P = V × I = 3,3 × 0,1 = 0,33 W
 
-Para elaborar o esquemático e layout da PCB foi utilizado o software KiCAD 10.0.1; 
+Considerando uma bateria de 300 mAh:
 
-Para elaborar a primeira versão da máquina de estados do firmware foi utilizado o software Itemis Create.
+::
 
+   E = 7,4 × 0,3 × 0,7 = 1,554 Wh
+
+Assim, o tempo estimado de operação é:
+
+::
+
+   t = 1,554 / 0,33 = 4,7 horas
+
+Esse resultado atende ao requisito mínimo de autonomia estabelecido para o projeto.
+
+O desenvolvimento do esquemático eletrônico foi realizado utilizando o software KiCad 10.0.1.
+
+A máquina de estados do firmware foi desenvolvida utilizando a ferramenta Itemis Create, conforme documentação apresentada em [2].
 
 Testes
 ======
+
+Cada periférico foi validado individualmente antes da integração completa do sistema.
+
+Durante os testes foram verificados:
+
+* inicialização correta do dispositivo;
+* comunicação entre o ESP32 e o periférico;
+* funcionamento esperado;
+* ausência de erros de comunicação.
+
+Os resultados completos podem ser consultados nas páginas específicas:
 
 Teste 1: Buzzer --> `clique aqui <teste_buzzer>`_
 
@@ -72,70 +105,111 @@ Teste 3: Acelerômetro --> `clique aqui <teste_acelerometro>`_
 
 Teste 4: Barômetro --> `clique aqui <teste_bar>`_
 
+Cada página apresenta:
+
+* Conexões de hardware;
+* Estrutura do projeto;
+* Descrição;
+* Referências;
 
 Layout da PCB
-======
+=============
 
-O esquemático e Layout da PCB se encontra abaixo...
+O esquemático e o layout preliminar da PCB foram desenvolvidos utilizando o software KiCad.
+
+Essa primeira versão possui como objetivo validar a integração elétrica entre os sensores, microcontrolador, reguladores de tensão e atuadores antes da fabricação da placa definitiva.
+
+PCB --> `clique aqui <KiCAD_PCB>`_
 
 Máquina de Estados do Firmware
-======
+==============================
 
-A máquina de estados do firmware é gerada com o auxílio da ferramenta *Itemis Create*.  
-Até o momento, foram definidos seis estados principais:
+A primeira versão da máquina de estados foi desenvolvida utilizando a ferramenta Itemis Create.
 
-- **PreLaunch**
-- **Launch**
-- **Flying**
-- **Peak**
-- **Dropping**
-- **FindMe**
-
-Descrição dos Estados
----------------------
-
-**PreLaunch**
-   Estado responsável pela inicialização de todos os periféricos do sistema.
-
-**Launch**
-   Representa o momento de lançamento do foguete.  
-   Neste estado, são coletadas as primeiras medições do acelerômetro e do barômetro.
-
-**Flying**
-   Estado de voo. As leituras dos sensores são realizadas periodicamente.  
-   Este estado termina ao detectar o **Peak** (apogeu).
-
-**Peak**
-   Corresponde ao apogeu do voo.  
-   Responsável pelo acionamento do servo para abertura do paraquedas.
-
-**Dropping**
-   Estado de descida. As leituras dos sensores continuam sendo feitas periodicamente.  
-   Termina ao detectar a queda completa.
-
-**FindMe**
-   Estado final, no qual apenas o buzzer é acionado para facilitar a localização do foguete.  
-   É encerrado manualmente pelo usuário ao encontrar o dispositivo.
+A arquitetura proposta é apresentada na **Figura 1**.
 
 .. image:: Imagens/Statechart.jpeg
    :alt: Diagrama da máquina de estados do firmware
    :align: center
    :width: 600px
 
-os tempos anexados as "flags" de mudança de estado, são para fins de simulação apenas.
+**Figura 1.** Máquina de estados utilizada pelo firmware.
 
+Foram definidos seis estados principais:
 
-================================
+- PreLaunch
+- Launch
+- Flying
+- Peak
+- Dropping
+- FindMe
 
+Descrição dos Estados
+---------------------
 
-Referências (links/datasheets/livros)
-*************************************
+**PreLaunch**
 
-- `Tutorial I2C ESP32 <https://microcontrollerslab.com/esp32-i2c-communication-tutorial-arduino-ide>`_
-- `Tutorial Itemis Create <https://www.itemis.com/en/products/itemis-create/documentation/tutorials>`_
-- `Documentação Espressif <https://docs.espressif.com/projects/esp-idf/en/latest/esp32/>`_
-- `Documentação LED-C utilizado para programar o SG90 <https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/peripherals/ledc.html>`_
-- `Documentação I2C utilizado para programar o MPU6050 <https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/peripherals/i2c.html>`_
-- `Exemplos de programação ESP32 Espressif <https://github.com/espressif/esp-idf/tree/master/examples>`_
-- `ESP32 as I2C Master <https://www.youtube.com/watch?v=Snp6iTu1R7E>`_
+Inicializa todos os periféricos, verifica o funcionamento dos sensores e aguarda a condição de lançamento.
 
+**Launch**
+
+Estado iniciado quando é detectada aceleração compatível com o lançamento do foguete.
+
+**Flying**
+
+Realiza continuamente a leitura dos sensores e estima a altitude durante o voo.
+
+**Peak**
+
+Detecta o apogeu e aciona o servomotor para abertura do paraquedas.
+
+**Dropping**
+
+Monitora a descida até detectar a aterrissagem.
+
+**FindMe**
+
+Após a aterrissagem, aciona o buzzer de forma intermitente para facilitar a localização do foguete.
+
+Transições
+----------
+
+As transições entre os estados são determinadas pelas leituras dos sensores.
+
+* **PreLaunch → Launch:** aceleração acima do limiar de lançamento durante um intervalo mínimo.
+
+* **Launch → Flying:** confirmação de que o foguete permanece em voo.
+
+* **Flying → Peak:** detecção do apogeu por meio da análise conjunta da altitude barométrica e da aceleração vertical.
+
+* **Peak → Dropping:** após o acionamento do servomotor.
+
+* **Dropping → FindMe:** altitude estável durante determinado intervalo de tempo, indicando aterrissagem.
+
+Os tempos apresentados nas condições de transição foram utilizados apenas para simulação durante o desenvolvimento da máquina de estados.
+
+Documentação do Firmware
+========================
+
+O firmware foi organizado de forma modular, separando as funções de cada periférico em arquivos independentes.
+
+Cada driver é responsável pela inicialização e comunicação com seu respectivo dispositivo, enquanto a máquina de estados coordena o comportamento geral do sistema.
+
+Essa organização facilita futuras manutenções, reutilização de código e integração dos módulos desenvolvidos.
+
+Referências
+***********
+
+[1] `Tutorial I2C ESP32 <https://microcontrollerslab.com/esp32-i2c-communication-tutorial-arduino-ide>`_
+
+[2] `Tutorial Itemis Create <https://www.itemis.com/en/products/itemis-create/documentation/tutorials>`_
+
+[3] `Documentação Espressif <https://docs.espressif.com/projects/esp-idf/en/latest/esp32/>`_
+
+[4] `Documentação LED-C utilizado para programar o SG90 <https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/peripherals/ledc.html>`_
+
+[5] `Documentação I2C utilizado para programar o MPU6050 <https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/peripherals/i2c.html>`_
+
+[6] `Exemplos de programação ESP32 Espressif <https://github.com/espressif/esp-idf/tree/master/examples>`_
+
+[7] `ESP32 as I2C Master <https://www.youtube.com/watch?v=Snp6iTu1R7E>`_
