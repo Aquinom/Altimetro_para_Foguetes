@@ -1,9 +1,11 @@
 Telemetria para Foguetes com ESP32
 ==================================
 
-Sistema de telemetria embarcada desenvolvido utilizando ESP32, ESP-IDF e FreeRTOS para aquisição, processamento e transmissão de dados em tempo real durante o voo de um foguete.
+Este módulo implementa a primeira versão do sistema de aquisição e processamento dos dados de voo do foguete. O objetivo é realizar a leitura dos sensores, estimar a altitude, calcular a velocidade vertical e detectar automaticamente o apogeu, disponibilizando essas informações para as próximas etapas do firmware.
 
-Conexões de hardware
+Nesta versão, a transmissão dos dados é realizada por meio da interface serial (UART), permitindo acompanhar o comportamento do algoritmo em tempo real durante os testes em bancada. O armazenamento permanente dos dados e a telemetria por rádio serão implementados nas próximas etapas do projeto.
+
+Conexões de Hardware
 --------------------
 
 ESP32 DevKit:
@@ -18,8 +20,8 @@ ESP32 DevKit:
 
 Sensores utilizados:
 
-- 1X BMP280
-- 1X MPU6050
+- 1 × BMP280
+- 1 × MPU6050
 
 Estrutura do Projeto
 --------------------
@@ -32,132 +34,131 @@ Estrutura do Projeto
      ├── flight_controller.h
      └── drivers/
           ├── bmp280/
-          │   ├── bmp280.h
-          │   └── bmp280.c
           ├── mpu6050/
-          │   ├── mpu6050.h
-          │   └── mpu6050.c
           └── i2c/
-              ├── i2c_helper.h
-              └── i2c_helper.c
 
-Descrição
----------
+O módulo ``flight_controller`` centraliza a lógica de voo do sistema. Ele é responsável por integrar as leituras dos sensores, estimar as variáveis de interesse, detectar eventos como o apogeu e disponibilizar essas informações para o restante do firmware.
 
-O firmware foi desenvolvido utilizando o framework ESP-IDF [1] e o sistema operacional FreeRTOS [2], permitindo a execução concorrente das tarefas responsáveis pela aquisição dos sensores e pela transmissão da telemetria.
+Funcionamento do Sistema
+------------------------
 
-A comunicação entre o microcontrolador e os sensores é realizada por meio do barramento I2C, conforme a API disponibilizada pela Espressif [3].
+O firmware foi desenvolvido utilizando o framework ESP-IDF [1] e o sistema operacional FreeRTOS [2].
 
-Durante a execução do sistema são obtidos continuamente os seguintes parâmetros:
-
-- Pressão atmosférica;
-- Altitude;
-- Temperatura;
-- Aceleração nos três eixos;
-- Velocidade vertical estimada.
-
-A arquitetura do firmware foi organizada em módulos independentes, separando os drivers dos sensores da lógica principal da aplicação. Essa organização facilita a manutenção do código, a reutilização dos drivers e a integração de novos dispositivos.
-
-A leitura dos sensores é realizada em uma task dedicada do FreeRTOS:
+O sistema realiza continuamente as seguintes etapas de processamento:
 
 ::
 
-    xTaskCreatePinnedToCore(
-        sensor_task,
-        "sensor_task",
-        4096,
-        NULL,
-        5,
-        NULL,
-        1);
+    BMP280 + MPU6050
+            │
+            ▼
+    Aquisição dos dados
+            │
+            ▼
+    Filtro de média móvel
+            │
+            ▼
+    Estimativa da altitude
+            │
+            ▼
+    Estimativa da velocidade
+            │
+            ▼
+    Detecção do apogeu
+            │
+            ▼
+    Envio pela UART
 
-Paralelamente, uma segunda task é responsável exclusivamente pela transmissão dos dados processados via interface serial:
+Essa sequência representa o fluxo completo de processamento executado durante o funcionamento do firmware.
 
-::
+Calibração dos Sensores
+-----------------------
 
-    xTaskCreatePinnedToCore(
-        telemetry_task,
-        "telemetry_task",
-        4096,
-        NULL,
-        1,
-        NULL,
-        0);
+Antes do início da operação, o firmware realiza a calibração dos sensores para estabelecer os valores de referência utilizados durante o voo.
 
-Como as duas tarefas acessam informações compartilhadas, foi utilizada sincronização por meio de mutex, evitando condições de corrida entre as tasks [2].
+No caso do BMP280, a calibração consiste na obtenção da pressão atmosférica de referência enquanto o foguete permanece em repouso na base de lançamento. Durante esse período são adquiridas diversas amostras consecutivas da pressão atmosférica, sendo calculada a média dessas medições. Esse valor é utilizado como pressão de referência para a aplicação da equação barométrica, permitindo que a altitude seja estimada em relação ao ponto de lançamento, em vez da altitude em relação ao nível do mar.
 
-::
+Para o MPU6050, a calibração é realizada mantendo o foguete completamente parado durante a inicialização do sistema. Nessa condição, diversas amostras da aceleração são coletadas para determinar o offset presente em cada eixo do acelerômetro. Os offsets calculados são posteriormente subtraídos das leituras durante a execução do firmware, reduzindo erros sistemáticos provocados por pequenas imperfeições do sensor.
 
-    xSemaphoreTake(telemetry_mutex, portMAX_DELAY);
+Após a calibração, todos os cálculos de altitude, velocidade vertical e detecção de apogeu passam a utilizar esses valores de referência. Dessa forma, pequenas diferenças entre sensores ou variações das condições ambientais no momento do lançamento têm menor influência sobre o desempenho do algoritmo.
 
-    telemetry.altitude = altitude;
+Aquisição dos Sensores
+----------------------
 
-    xSemaphoreGive(telemetry_mutex);
+A comunicação entre o ESP32 e os sensores é realizada pelo barramento I²C utilizando os drivers disponibilizados pela ESP-IDF [3].
 
-Para reduzir oscilações provenientes das vibrações durante o voo, os dados de altitude passam por um filtro de média móvel com 15 amostras.
+O BMP280 fornece medições de pressão atmosférica e temperatura [5], enquanto o MPU6050 fornece aceleração nos três eixos [6].
 
-::
+A altitude não é medida diretamente pelo sistema. Ela é estimada a partir da pressão atmosférica utilizando a equação barométrica e uma pressão de referência obtida antes do lançamento.
 
-    #define MOVING_AVG_SIZE 15
+Filtragem das Leituras
+----------------------
 
-A atualização do filtro ocorre continuamente durante a aquisição dos dados.
+As medições do barômetro apresentam pequenas oscilações provocadas pelo ruído eletrônico dos sensores e pelas vibrações do foguete.
 
-::
+Para reduzir esse efeito foi implementado um filtro de média móvel utilizando uma janela de quinze amostras.
 
-    altitude = ma_update(&alt_filter, altitude_raw);
+Esse filtro suaviza as medições sem comprometer significativamente o tempo de resposta necessário para detectar o apogeu.
 
-A velocidade vertical é estimada combinando informações provenientes do acelerômetro e do barômetro, aumentando a robustez da estimativa quando comparada ao uso isolado de apenas um sensor.
+Estimativa da Velocidade Vertical
+---------------------------------
 
-::
+A velocidade vertical também não é medida diretamente.
 
-    velocity += accel * dt * 0.25f;
+Inicialmente ela é obtida por integração da aceleração medida pelo MPU6050.
 
-    velocity =
-        (velocity * 0.35f) +
-        (vel_baro * 0.65f);
+Em seguida essa estimativa é combinada com a velocidade calculada a partir da variação da altitude barométrica.
 
-O firmware também implementa um algoritmo para detecção do apogeu do voo. A decisão é baseada na combinação das leituras dos sensores, considerando simultaneamente altitude mínima, velocidade vertical negativa e aceleração compatível com o início da descida.
+Essa fusão reduz o efeito do ruído presente em cada sensor individualmente.
 
-::
+Os coeficientes utilizados na combinação (0,35 para o acelerômetro e 0,65 para o barômetro) foram definidos experimentalmente durante os testes em bancada e poderão ser ajustados nas próximas etapas do projeto.
 
-    if (
-        altitude_valid &&
-        descending &&
-        accel_negative)
-    {
-        apogee_detected = true;
+Detecção de Apogeu
+------------------
 
-        ESP_LOGW(TAG, "APOGEU DETECTADO");
-    }
+Após o processamento das leituras, o firmware verifica continuamente se o foguete atingiu o ponto de altitude máxima.
 
-Após o processamento, os dados são enviados continuamente ao monitor serial para acompanhamento do comportamento do sistema em tempo real.
+A detecção ocorre quando três condições são satisfeitas simultaneamente:
 
-::
+* altitude acima de um limite mínimo;
+* velocidade vertical negativa, indicando início da descida;
+* aceleração vertical compatível com o término da fase de subida.
 
-    ESP_LOGI(
-        TAG,
-        "ALT: %.2f m | VEL: %.2f m/s | ACC: %.3f g",
-        local.altitude,
-        local.velocity,
-        local.acceleration);
+A utilização conjunta dessas condições reduz falsas detecções provocadas por oscilações dos sensores.
+
+Arquitetura do Firmware
+-----------------------
+
+O sistema foi dividido em duas tarefas do FreeRTOS.
+
+A primeira é responsável pela aquisição e processamento dos sensores.
+
+A segunda realiza apenas o envio das informações processadas para o monitor serial.
+
+Essa separação impede que atrasos na transmissão serial interfiram na frequência de aquisição dos sensores.
+
+As duas tarefas compartilham uma estrutura comum de telemetria.
+
+Para evitar condições de corrida durante esse acesso compartilhado é utilizado um mutex, garantindo que apenas uma tarefa modifique os dados por vez.
 
 Log de Funcionamento
 --------------------
 
-Para validar o algoritmo de detecção do apogeu foi realizado um teste em bancada utilizando o conjunto completo de sensores.
+Para validar o algoritmo de detecção de apogeu foi realizado um teste em bancada utilizando um BMP280 e um MPU6050.
 
-Como não era possível reproduzir um voo real em ambiente de laboratório, foi definida uma altura de aproximadamente **50 cm** como referência para simular o apogeu. Durante o ensaio, o sistema monitorou continuamente a altitude estimada e identificou corretamente o instante em que a altura máxima foi atingida.
+Como não era possível reproduzir um voo real em laboratório, foi definida uma altura aproximada de 50 cm como referência para representar o apogeu.
 
-A **Figura 1** apresenta o log obtido durante o teste. Observa-se que, ao atingir a altura configurada, o firmware registra a mensagem de detecção do apogeu e armazena o maior valor de altitude medido (*max*), mantendo esse valor disponível para utilização nas próximas etapas da máquina de estados.
+A **Figura 1** apresenta o monitor serial durante o ensaio.
+
+Quando a altura máxima é atingida, o firmware identifica corretamente o apogeu, registra a mensagem correspondente e armazena o maior valor de altitude medido, que será utilizado nas próximas etapas da máquina de estados.
 
 .. image:: ../images/apogeu_detection_test.jpg
    :alt: Apogeu Detection
    :align: center
    :width: 600px
 
-**Figura 1.** Log da execução do algoritmo de detecção de apogeu durante teste em bancada.
+**Figura 1.** Resultado do algoritmo de detecção de apogeu durante teste em bancada.
 
-O resultado obtido demonstra que o algoritmo foi capaz de detectar corretamente o ponto de altitude máxima dentro das condições simuladas, validando sua integração com o restante do firmware antes da realização de testes em voo.
+Os resultados demonstram que o algoritmo foi capaz de identificar corretamente o ponto de altitude máxima nas condições simuladas, validando a abordagem adotada antes da realização de testes em voo.
 
 Referências
 -----------
