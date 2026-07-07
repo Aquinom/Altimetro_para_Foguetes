@@ -9,60 +9,71 @@ Etapa 1
 Visão geral
 ***********
 
-A Etapa 1 tem como objetivo estruturar os requisitos do projeto, de modo a definir a escolha dos componentes que atendam às necessidades do projeto.
+A Etapa 1 tem como objetivo definir os requisitos do sistema e selecionar os componentes que atendam às necessidades do projeto. Nessa etapa, são realizadas a pesquisa, a comparação e a aquisição dos principais dispositivos eletrônicos, bem como o levantamento das bibliotecas necessárias para o desenvolvimento do software embarcado.
 
-A partir dessa definição, são realizadas a seleção e aquisição dos componentes, bem como a pesquisa das bibliotecas necessárias para o desenvolvimento. Além disso, esta etapa contempla o estudo dos sensores envolvidos e a elaboração de um diagrama de blocos simples, servindo como base para as próximas fases do projeto.
+Além da seleção dos componentes, também são estudados os sensores utilizados no sistema e elaborada a arquitetura inicial por meio de um diagrama de blocos, que servirá como base para as etapas posteriores do projeto.
 
 Desenvolvimento
 ***************
 
-O dispositivo sendo desenvolvido deve ser capaz de medir com confiança e precisão altitude do foguete, ser capaz de abrir um sistema de paraquedas e emitir um sinal sonoro para facilitar sua localização no solo após aterrisagem. Para garantir os requisitos de altitude, serão integrados múltiplos módulos com barômetros, o qual passará por um filtro digital de modo que a medida seja a mais correta possível. Será implementado um atuador mecânico, neste caso um servo motor, para abertura do paraquedas quando for detectado o momento certo. Os dados de um acelerômetro serão cruzados com o barômetro para detectar apogeu. Após a aterrisagem do foguete, um buzzer será acionado de forma intermitente que facilitará encontrar o foguete. Para alimentar todos os sitemas, uma bateria leve será embarcada.
+O dispositivo desenvolvido deve ser capaz de medir a altitude do foguete com precisão e confiabilidade, detectar o apogeu do voo, acionar automaticamente o sistema de abertura do paraquedas e emitir um sinal sonoro após a aterrissagem para facilitar sua localização.
 
-Para auxiliar na seleção dos componentes de cada requisito, foi realizado uma pesquisa de alguns sensores e criado uma tabela para cada um que agrega os critérios de seleção mais importantes:
+Para estimar a altitude, serão utilizados múltiplos sensores barométricos. As medições obtidas serão processadas por algoritmos de filtragem digital, reduzindo a influência de ruídos e aumentando a confiabilidade da estimativa. Para a detecção do apogeu, os dados provenientes dos barômetros serão combinados com as informações do acelerômetro. Após a identificação do momento adequado, um servomotor será acionado para liberar o mecanismo de abertura do paraquedas. Finalizada a aterrissagem, um buzzer emitirá sinais sonoros intermitentes para facilitar a recuperação do foguete. Todos os módulos serão alimentados por uma bateria LiPo de baixo peso, adequada às restrições da aplicação.
+
+Com o objetivo de selecionar os sensores mais adequados, foi realizada uma comparação entre os principais modelos disponíveis no mercado, considerando critérios como faixa de operação, precisão, disponibilidade de bibliotecas, facilidade de aquisição e custo.
+
+A **Figura 1** apresenta a comparação entre os barômetros avaliados.
 
 .. image:: imagens/tabela_barometro.png
 
-Para a seleção dos barômetros foram selecionados 6 modelos disponíveis no mercado nacional e internacional. Dado o prazo de implementação e a disponibilidade no mercado nacional, disponibilidade de bibliotecas e acurácia boa para esta aplicação, foi selecionado o sensor BMP280 para o projeto. Para a implementação do giroscópio analisamos 4 modelos conforme podemos na tabela abaixo:
+Foram analisados seis modelos de barômetros disponíveis no mercado nacional e internacional. Considerando a disponibilidade para aquisição, a documentação técnica, a existência de bibliotecas consolidadas e a precisão exigida pela aplicação, o sensor BMP280 foi selecionado para o projeto [2][6].
+
+A **Figura 2** apresenta a comparação entre os acelerômetros analisados.
 
 .. image:: imagens/tabela_acelerometro.jpg
 
-Podemos perceber que todos os modelos de acelerômetro possuem faixas de medição de aceleração, tensão de operação e protocolo de comunicação iguais. Com isso em mente parâmetros que definem a escolha do sensor passam a ser disponibilidade no mercado, SNR, disponibilidade de bibliotecas e custo. O modelo MPU6050 foi selecionado por ter um custo menor que os outros, muitas bibliotecas disponíveis e ser de fácil aquisição no mercado nacional, entretanto muito cuidado deve ser tomado com seus dados pois são sucetíveis a ruído, desse modo ficando evidente a necessidade de implementação de algum método de filtragem.
+Observa-se que os acelerômetros avaliados apresentam características semelhantes quanto à faixa de medição, tensão de operação e protocolo de comunicação. Dessa forma, critérios como custo, disponibilidade no mercado nacional, relação sinal-ruído (SNR) e disponibilidade de bibliotecas tornaram-se determinantes para a seleção do componente.
 
+O modelo MPU6050 foi escolhido devido ao seu baixo custo, ampla disponibilidade e grande quantidade de bibliotecas disponíveis para desenvolvimento. Entretanto, esse sensor apresenta maior suscetibilidade a ruídos, tornando necessária a implementação de técnicas de filtragem para aumentar a confiabilidade das medições.
 
 Componentes
-======
+============
+
 `Ver componentes <Componentes.rst>`_
 
 Diagrama de blocos
-================================
+******************
 
-O diagrama de blocos apresenta a arquitetura elétrica e de comunicação do sistema embarcado no foguete.
-
+A arquitetura elétrica e de comunicação do sistema embarcado é apresentada na **Figura 3**.
 
 A bateria LiPo 1S é responsável por fornecer alimentação para todos os componentes do sistema, incluindo o microcontrolador, os três barômetros, o acelerômetro com giroscópio, o servomotor e o buzzer.
 
+O microcontrolador central (MCC) realiza a aquisição dos dados dos sensores, o processamento das informações e o controle dos atuadores. Os três barômetros são conectados ao MCC por meio de dois barramentos I²C, permitindo redundância nas medições de altitude e aumentando a confiabilidade do sistema.
 
-O microcontrolador central (MCC) é responsável por processar os dados dos sensores e controlar os atuadores. Os três barômetros são conectados ao MCC por meio de dois barramentos I2C. Essa redundância de sensores permite obter medições de altitude mais confiáveis.
+O acelerômetro e giroscópio também utilizam comunicação I²C. Os dados obtidos por esse sensor são combinados às informações dos barômetros para auxiliar na identificação do apogeu do foguete.
 
-
-O acelerômetro e giroscópio também se comunicam com o MCC por meio do barramento I2C. Os dados desse sensor são utilizados em conjunto com os dados dos barômetros para auxiliar na identificação do apogeu do foguete.
-
-
-O servomotor é controlado pelo MCC por um sinal PWM e será utilizado para acionar o mecanismo de abertura do paraquedas. Já o buzzer é acionado por um sinal digital do tipo High/Low, emitindo alertas sonoros após a aterrissagem para facilitar a localização do foguete.
+O servomotor é controlado pelo MCC por meio de um sinal PWM e é responsável pelo acionamento do mecanismo de abertura do paraquedas. O buzzer, por sua vez, é acionado por um sinal digital do tipo High/Low, emitindo alertas sonoros após a aterrissagem para facilitar a localização do foguete.
 
 .. image:: imagens/Diagrama_de_blocos_v2.png
    :alt: Diagrama de blocos
    :align: center
    :width: 600px
 
+**Figura 3.** Diagrama de blocos da arquitetura do sistema embarcado.
 
-Referências (links/datasheets/livros)
-*************************************
+Referências
+***********
 
-- `nRF Connect SDK <https://developer.nordicsemi.com/nRF_Connect_SDK/doc/2.4.2/nrf/getting_started/modifying.html#configure-application>`_
-- `BMP180 Datasheet <https://cdn-shop.adafruit.com/datasheets/BST-BMP180-DS000-09.pdf>`_
-- `BMP280 Datasheet <https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bmp280-ds001.pdf>`_
-- `BMP388 Datasheet <https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bmp388-ds001.pdf>`_
-- `DPS310 Datasheet <https://br.mouser.com/pdfdocs/Infineon-DPS310-DS-v01_00-EN2.pdf>`_
-- `DPS368 Datasheet <https://www.infineon.com/assets/row/public/documents/24/49/infineon-dps368-datasheet-en.pdf>`_
-- `Adafruit BMP280 Sensor Overview <https://cdn-learn.adafruit.com/downloads/pdf/adafruit-bmp280-barometric-pressure-plus-temperature-sensor-breakout.pdf>`_
+[1] nRF Connect SDK. https://developer.nordicsemi.com/nRF_Connect_SDK/doc/2.4.2/nrf/getting_started/modifying.html#configure-application
+
+[2] BMP280 Datasheet. https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bmp280-ds001.pdf
+
+[3] BMP180 Datasheet. https://cdn-shop.adafruit.com/datasheets/BST-BMP180-DS000-09.pdf
+
+[4] BMP388 Datasheet. https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bmp388-ds001.pdf
+
+[5] DPS310 Datasheet. https://br.mouser.com/pdfdocs/Infineon-DPS310-DS-v01_00-EN2.pdf
+
+[6] Adafruit BMP280 Sensor Overview. https://cdn-learn.adafruit.com/downloads/pdf/adafruit-bmp280-barometric-pressure-plus-temperature-sensor-breakout.pdf
+
+[7] DPS368 Datasheet. https://www.infineon.com/assets/row/public/documents/24/49/infineon-dps368-datasheet-en.pdf
