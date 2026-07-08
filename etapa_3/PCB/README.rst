@@ -26,7 +26,7 @@ Arquitetura da PCB
 
 A Figura 1 apresenta a visão geral da placa desenvolvida.
 
-.. image:: /images/PCB_3D.png
+.. image:: etapa_3/images/PCB_3D.jpg
    :alt: Visualização 3D da PCB.
    :align: center
    :width: 650px
