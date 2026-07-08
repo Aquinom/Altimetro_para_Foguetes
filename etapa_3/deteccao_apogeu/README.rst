@@ -10,14 +10,14 @@ Objetivos da Etapa
 
 Esta etapa teve como objetivo desenvolver e validar a primeira versão do algoritmo responsável pela identificação automática do apogeu do foguete. Para isso, foram implementados os módulos de aquisição dos sensores, estimação da altitude, filtragem das leituras, cálculo da velocidade vertical e detecção do ponto de altitude máxima.
 
-Além do algoritmo de detecção, foi desenvolvida a estrutura responsável pela aquisição e transmissão dos dados pela interface serial (UART), permitindo acompanhar o comportamento do sistema durante os testes em bancada e fornecendo uma base para a integração com as próximas etapas do firmware.
+Além do algoritmo de detecção, foi desenvolvida a estrutura responsável pela aquisição e transmissão dos dados pela interface serial (UART), permitindo acompanhar o comportamento do sistema durante os testes em bancada e fornecendo uma base para a integração com a máquina de estados e os demais módulos do firmware.
 
 Visão Geral
 -----------
 
-Este módulo implementa a primeira versão do sistema de aquisição e processamento dos dados de voo do foguete. O objetivo é realizar a leitura dos sensores, estimar a altitude, calcular a velocidade vertical e detectar automaticamente o apogeu, disponibilizando essas informações para as próximas etapas do firmware.
+Este módulo implementa a primeira versão do sistema de aquisição e processamento dos dados de voo do foguete. O objetivo é realizar a leitura dos sensores, estimar a altitude, calcular a velocidade vertical e detectar automaticamente o apogeu, disponibilizando essas informações para as próximas etapas do projeto.
 
-Nesta versão, a transmissão dos dados é realizada por meio da interface serial (UART), permitindo acompanhar o comportamento do algoritmo em tempo real durante os testes em bancada. O armazenamento permanente dos dados por NVS será implementado na próxima etapa do projeto.
+Nesta versão, a transmissão dos dados é realizada por meio da interface serial (UART), permitindo acompanhar em tempo real o comportamento do algoritmo durante os testes em bancada. O armazenamento permanente dos dados utilizando a memória NVS e a integração com os demais módulos do firmware serão implementados nas próximas etapas do projeto.
 
 Conexões de Hardware
 --------------------
@@ -51,14 +51,14 @@ Estrutura do Projeto
           ├── mpu6050/
           └── i2c/
 
-O módulo ``flight_controller`` centraliza toda a lógica de voo do sistema. Ele é responsável por integrar as leituras dos sensores, estimar as variáveis de interesse, detectar eventos como o apogeu e disponibilizar essas informações para os demais módulos do firmware.
+O módulo ``flight_controller`` concentra toda a lógica responsável pelo processamento dos dados de voo. Ele realiza a aquisição dos sensores, a calibração inicial, a filtragem das medições, a estimação da altitude e da velocidade vertical, a detecção automática do apogeu e o compartilhamento dessas informações com os demais módulos do firmware.
 
 Funcionamento do Sistema
 ------------------------
 
 O firmware foi desenvolvido utilizando o framework ESP-IDF [1] e o sistema operacional FreeRTOS [2].
 
-O processamento das informações ocorre continuamente conforme o fluxo apresentado abaixo.
+O processamento executado pelo sistema pode ser resumido pelo fluxo apresentado a seguir.
 
 ::
 
@@ -68,187 +68,257 @@ O processamento das informações ocorre continuamente conforme o fluxo apresent
                   └──────────┬───────────┘
                              │
                              ▼
-                Aquisição dos sensores
+                 Aquisição dos sensores
                              │
                              ▼
-                Calibração inicial
+                 Calibração inicial
                              │
                              ▼
-                Filtragem das medições
+                 Filtragem das medições (pressão, aceleração e velocidade)
                              │
                              ▼
-                Estimativa da altitude (utilizando pressão do bar)
+                 Estimativa da altitude (Equação barométrica)
                              │
                              ▼
-                Estimativa da velocidade vertical (utilizando uma fusão de sensores)
+                 Estimativa da velocidade vertical (Combinação entre aceleração integrada e velocidade barométrica)
                              │
                              ▼
-                Verificação dos critérios de apogeu
+                 Verificação do apogeu
                              │
                              ▼
-                Envio das informações (UART)
+                 Transmissão via UART
 
-Esse fluxo representa todas as etapas executadas pelo firmware durante seu funcionamento, desde a leitura dos sensores até a disponibilização das informações para acompanhamento em tempo real.
 
 Calibração dos Sensores
 -----------------------
 
-Antes do início da operação, o firmware realiza a calibração dos sensores para estabelecer os valores de referência utilizados durante o voo.
+Antes do início da operação, o firmware executa uma rotina de calibração responsável por determinar os valores de referência utilizados durante todo o voo.
 
-No caso do BMP280, a calibração consiste na obtenção da pressão atmosférica de referência enquanto o foguete permanece em repouso na base de lançamento. Durante esse período são adquiridas 100 amostras consecutivas da pressão atmosférica, sendo calculada a média dessas medições. Esse valor é utilizado como pressão de referência para a aplicação da equação barométrica, permitindo que a altitude seja estimada em relação ao ponto de lançamento, em vez da altitude em relação ao nível do mar.
+No caso do BMP280, são adquiridas 100 amostras consecutivas da pressão atmosférica enquanto o foguete permanece em repouso na base de lançamento. A média dessas medições é utilizada como pressão de referência para a aplicação da equação barométrica, permitindo estimar a altitude relativa ao ponto de lançamento.
 
-Para o MPU6050, a calibração é realizada mantendo o foguete completamente parado durante a inicialização do sistema. Nessa condição, 200 amostras da aceleração são coletadas para determinar o offset presente em cada eixo do acelerômetro. Os offsets calculados são posteriormente subtraídos das leituras durante a execução do firmware, reduzindo erros sistemáticos provocados por pequenas imperfeições do sensor.
+Para o MPU6050, são coletadas 200 amostras consecutivas da aceleração com o sistema completamente parado. A média dessas medições corresponde ao offset presente em cada eixo do acelerômetro, sendo posteriormente subtraída das leituras durante a execução do firmware.
 
-Após a calibração, todos os cálculos de altitude, velocidade vertical e detecção de apogeu passam a utilizar esses valores de referência. Dessa forma, pequenas diferenças entre sensores ou variações das condições ambientais no momento do lançamento exercem menor influência sobre o desempenho do algoritmo.
+Após a calibração, todas as estimativas de altitude, velocidade vertical e detecção do apogeu passam a utilizar esses valores de referência, reduzindo a influência de pequenas diferenças entre sensores e das condições ambientais presentes no momento do lançamento.
 
 Aquisição dos Sensores
 ----------------------
 
-A comunicação entre o ESP32 e os sensores é realizada pelo barramento I²C utilizando os drivers disponibilizados pela ESP-IDF [3].
+A comunicação entre o ESP32 e os sensores é realizada por meio do barramento I²C utilizando os drivers disponibilizados pela ESP-IDF [3].
 
-O BMP280 fornece medições de pressão atmosférica e temperatura [5], enquanto o MPU6050 fornece aceleração nos três eixos [6].
+O BMP280 fornece medições de pressão atmosférica e temperatura [5], enquanto o MPU6050 fornece medições da aceleração nos três eixos [6].
 
-A altitude é estimada a partir da pressão atmosférica utilizando a equação barométrica e uma pressão de referência obtida durante a calibração inicial.
+A altitude não é medida diretamente pelo sistema. Ela é estimada a partir da pressão atmosférica utilizando a equação barométrica e a pressão de referência obtida durante a calibração inicial.
 
-Resumo dos sensores utilizados:
+As informações fornecidas pelos sensores são utilizadas em diferentes etapas do algoritmo, conforme apresentado na Tabela 1.
 
-+-----------+-----------------------------+----------------------------------+
-| Sensor    | Grandeza medida             | Utilização no algoritmo          |
-+===========+=============================+==================================+
-| BMP280    | Pressão e temperatura       | Estimativa da altitude           |
-+-----------+-----------------------------+----------------------------------+
-| MPU6050   | Aceleração nos três eixos   | Estimativa da velocidade         |
-+-----------+-----------------------------+----------------------------------+
++-----------+-----------------------------+--------------------------------------------+
+| Sensor    | Grandeza medida             | Utilização no algoritmo                    |
++===========+=============================+============================================+
+| BMP280    | Pressão e temperatura       | Estimativa da altitude barométrica         |
++-----------+-----------------------------+--------------------------------------------+
+| MPU6050   | Aceleração nos três eixos   | Estimativa da velocidade vertical          |
++-----------+-----------------------------+--------------------------------------------+
+
+**Tabela 1.** Sensores utilizados pelo algoritmo de detecção de apogeu e suas respectivas funções.
 
 Filtragem das Leituras
 ----------------------
 
-As medições do barômetro e acelerômetro apresentam pequenas oscilações provocadas pelo ruído eletrônico dos sensores, vibrações estruturais do foguete e pequenas variações instantâneas da pressão atmosférica.
+As medições fornecidas pelos sensores apresentam oscilações decorrentes do ruído eletrônico, vibrações estruturais do foguete e pequenas variações instantâneas das grandezas medidas.
 
-Para reduzir esse efeito foi implementado um filtro de média móvel utilizando uma janela de quinze amostras.
+Para reduzir esses efeitos, foram implementados filtros de média móvel utilizando uma janela de quinze amostras. Diferentemente de uma filtragem aplicada apenas à altitude, o algoritmo realiza o processamento individual de três variáveis distintas:
 
-Esse filtro suaviza as medições sem comprometer significativamente o tempo de resposta necessário para detectar o apogeu, reduzindo a ocorrência de falsas detecções.
+* altitude estimada pelo BMP280;
+* aceleração medida pelo MPU6050;
+* velocidade vertical estimada.
+
+Essa estratégia permite reduzir oscilações em diferentes etapas do processamento, fornecendo informações mais estáveis para o algoritmo de detecção do apogeu sem comprometer significativamente seu tempo de resposta.
 
 Estimativa da Velocidade Vertical
 ---------------------------------
 
-Inicialmente, a velocidade vertial é obtida pela integração da aceleração medida pelo MPU6050.
+A velocidade vertical não é medida diretamente pelos sensores, sendo estimada a partir de duas abordagens complementares.
 
-Em seguida, essa estimativa é combinada com a velocidade calculada a partir da taxa de variação da altitude barométrica.
+Inicialmente, é realizada a integração numérica da aceleração medida pelo MPU6050. Em paralelo, também é calculada uma estimativa da velocidade utilizando a taxa de variação da altitude obtida pelo BMP280.
 
-Essa fusão reduz o efeito do ruído presente em cada sensor individualmente, aproveitando a resposta rápida do acelerômetro e a maior estabilidade da altitude estimada pelo barômetro.
+A estimativa final da velocidade vertical é obtida pela combinação ponderada entre essas duas informações, conforme ilustrado abaixo.
 
-Os coeficientes utilizados na combinação (0,35 para o acelerômetro e 0,65 para o barômetro) foram definidos experimentalmente durante os testes em bancada e poderão ser ajustados após os primeiros ensaios em voo. Foi atribuído um peso maior às estimativas provenientes do barômetro devido à maior estabilidade das medições de altitude, enquanto o acelerômetro está mais sujeito aos efeitos de ruídos, vibrações e ao acúmulo de erros decorrente da integração da aceleração.
+::
+
+        MPU6050                    BMP280
+           │                          │
+           ▼                          ▼
+  Integral da aceleração     Derivada da altitude
+           │                          │
+           └──────────┬───────────────┘
+                      │
+                      ▼
+             Combinação ponderada
+                      │
+                      ▼
+        Estimativa da velocidade
+
+Os coeficientes utilizados nessa combinação foram definidos experimentalmente durante os testes em bancada, atribuindo peso de **0,35** para a velocidade proveniente da integração da aceleração e **0,65** para a velocidade calculada a partir da altitude barométrica.
+
+Foi atribuído maior peso às estimativas provenientes do barômetro devido à maior estabilidade das medições de altitude, enquanto o acelerômetro está mais sujeito aos efeitos de vibrações e ao acúmulo de erros decorrente da integração numérica da aceleração.
+
+Durante a integração da aceleração também é aplicado um fator de escala definido experimentalmente, reduzindo a influência do erro acumulado ao longo do tempo. Esse parâmetro poderá ser refinado após os primeiros ensaios em voo.
+
+Após o cálculo da velocidade, também é aplicado um filtro de média móvel, reduzindo pequenas oscilações que poderiam provocar falsas detecções do apogeu.
 
 Parâmetros do Algoritmo
 -----------------------
 
-+-----------------------------+-------------------------------+
-| Parâmetro                   | Valor                         |
-+=============================+===============================+
-| Janela da média móvel       | 15 amostras                   |
-+-----------------------------+-------------------------------+
-| Peso do acelerômetro        | 0,35                          |
-+-----------------------------+-------------------------------+
-| Peso do barômetro           | 0,65                          |
-+-----------------------------+-------------------------------+
-| Comunicação                 | I²C                           |
-+-----------------------------+-------------------------------+
-| Sistema operacional         | FreeRTOS                      |
-+-----------------------------+-------------------------------+
+Os principais parâmetros utilizados pelo algoritmo são apresentados na Tabela 2.
+
++--------------------------------------+----------------------+
+| Parâmetro                            | Valor                |
++======================================+======================+
+| Período da Sensor Task               | 20 ms (50 Hz)        |
++--------------------------------------+----------------------+
+| Período da Telemetry Task            | 200 ms (5 Hz)        |
++--------------------------------------+----------------------+
+| Janela da média móvel                | 15 amostras          |
++--------------------------------------+----------------------+
+| Peso do acelerômetro                 | 0,35                 |
++--------------------------------------+----------------------+
+| Peso do barômetro                    | 0,65                 |
++--------------------------------------+----------------------+
+| Altitude mínima para detectar apogeu | 0,15 m               |
++--------------------------------------+----------------------+
+| Limite de velocidade vertical        | -0,03 m/s            |
++--------------------------------------+----------------------+
+| Limite de aceleração                 | -0,02 g              |
++--------------------------------------+----------------------+
+
+**Tabela 2.** Principais parâmetros utilizados pelo algoritmo de detecção de apogeu.
 
 Detecção de Apogeu
 ------------------
 
 Após o processamento das leituras, o firmware verifica continuamente se o foguete atingiu o ponto de altitude máxima.
 
-A detecção ocorre somente quando três condições são satisfeitas simultaneamente:
+Para evitar falsas detecções provocadas por oscilações momentâneas dos sensores, o algoritmo considera simultaneamente informações de altitude, velocidade vertical e aceleração.
 
-* altitude acima de um limite mínimo;
-* velocidade vertical negativa, indicando o início da descida;
-* aceleração vertical compatível com a transição entre a fase de subida e a fase de descida.
+A detecção do apogeu ocorre somente quando todas as seguintes condições são satisfeitas:
 
-A utilização conjunta dessas condições reduz significativamente falsas detecções provocadas por oscilações momentâneas dos sensores.
+* altitude superior a **0,15 m**;
+* velocidade vertical inferior a **-0,03 m/s**, indicando o início da descida;
+* aceleração vertical inferior a **-0,02 g**, compatível com a transição entre a fase de subida e a fase de descida.
 
-Os critérios utilizados pelo algoritmo são resumidos na tabela a seguir.
+Além desses critérios, velocidades muito próximas de zero são consideradas nulas antes da etapa de decisão, reduzindo oscilações numéricas próximas ao ponto de inversão da trajetória.
 
-+--------------------------------------+---------------------------------------------+
-| Critério                             | Finalidade                                  |
-+======================================+=============================================+
-| Altitude acima do limite mínimo      | Evita detecção durante a inicialização      |
-+--------------------------------------+---------------------------------------------+
-| Velocidade vertical negativa         | Indica o início da descida                  |
-+--------------------------------------+---------------------------------------------+
-| Aceleração compatível com a descida  | Confirma a mudança de fase do voo           |
-+--------------------------------------+---------------------------------------------+
+Os critérios utilizados pelo algoritmo são resumidos na Tabela 3.
 
-De forma simplificada, o algoritmo executa continuamente o seguinte procedimento:
++----------------------------------------+-----------------------------------------------+
+| Critério                               | Finalidade                                    |
++========================================+===============================================+
+| Altitude superior a 0,15 m             | Evita detecção durante a inicialização        |
++----------------------------------------+-----------------------------------------------+
+| Velocidade inferior a -0,03 m/s        | Identifica o início da descida                |
++----------------------------------------+-----------------------------------------------+
+| Aceleração inferior a -0,02 g          | Confirma a mudança de fase do voo             |
++----------------------------------------+-----------------------------------------------+
+
+**Tabela 3.** Critérios utilizados para a detecção automática do apogeu.
+
+De forma simplificada, o algoritmo executa continuamente o procedimento descrito abaixo.
 
 ::
 
-    Enquanto o sistema estiver ativo
+    Enquanto o sistema estiver em execução
 
-        Ler os sensores
+        Ler BMP280
 
-        Filtrar as medições
+        Ler MPU6050
 
-        Estimar a altitude
+        Filtrar altitude
 
-        Estimar a velocidade vertical
+        Filtrar aceleração
+
+        Estimar velocidade
+
+        Filtrar velocidade
 
         Se:
 
-            altitude > limite mínimo
+            altitude > 0,15 m
 
-            velocidade < 0
+            velocidade < -0,03 m/s
 
-            aceleração indicar descida
+            aceleração < -0,02 g
 
         Então:
 
             Detectar apogeu
 
+            Armazenar a maior altitude obtida
+
 Arquitetura do Firmware
 -----------------------
 
-O sistema foi dividido em duas tarefas do FreeRTOS.
+O firmware foi desenvolvido utilizando o sistema operacional FreeRTOS, permitindo que a aquisição dos sensores e a transmissão das informações sejam executadas de forma concorrente e independente.
 
-A primeira é responsável pela aquisição e processamento das informações provenientes dos sensores.
+Nesta versão do projeto foram implementadas duas tarefas principais, apresentadas na Tabela 4.
 
-A segunda realiza exclusivamente a transmissão das informações processadas para o monitor serial.
++------------------+----------------+--------------------------------------------------------------+
+| Task             | Frequência     | Responsabilidade                                             |
++==================+================+==============================================================+
+| Sensor Task      | 20 ms (50 Hz)  | Realiza a leitura dos sensores, executa a calibração, aplica |
+|                  |                | os filtros, estima altitude e velocidade vertical, verifica  |
+|                  |                | os critérios de detecção do apogeu e atualiza a estrutura de |
+|                  |                | telemetria compartilhada.                                    |
++------------------+----------------+--------------------------------------------------------------+
+| Telemetry Task   | 200 ms (5 Hz)  | Realiza a transmissão das informações processadas pela       |
+|                  |                | interface UART, permitindo acompanhar em tempo real o        |
+|                  |                | funcionamento do algoritmo durante os testes em bancada.     |
++------------------+----------------+--------------------------------------------------------------+
 
-Essa separação evita que atrasos na comunicação serial interfiram na frequência de aquisição dos sensores, preservando o desempenho do algoritmo de detecção de apogeu.
+**Tabela 4.** Organização das tarefas implementadas utilizando o FreeRTOS.
 
-As duas tarefas compartilham uma estrutura comum contendo as informações de voo.
+A separação entre aquisição dos sensores e transmissão serial impede que atrasos na comunicação afetem a frequência de execução do algoritmo responsável pela detecção do apogeu.
 
-Para evitar condições de corrida durante esse acesso compartilhado é utilizado um mutex, garantindo acesso exclusivo aos dados durante operações críticas.
+As duas tarefas compartilham uma estrutura comum contendo as principais informações do voo, como altitude, velocidade vertical, aceleração e estado da detecção do apogeu. Para evitar condições de corrida durante o acesso simultâneo a essa estrutura é utilizado um mutex, garantindo acesso exclusivo aos dados durante operações críticas.
 
 Log de Funcionamento
 --------------------
 
-Para validar o algoritmo de detecção de apogeu foi realizado um teste em bancada utilizando um BMP280 e um MPU6050.
+Para validar o algoritmo de detecção de apogeu foi realizado um ensaio em bancada utilizando um sensor BMP280 e um MPU6050.
 
-Como não era possível reproduzir um voo real em laboratório, foi definida uma altura aproximada de 50 cm como referência para representar o apogeu.
+Como não era possível reproduzir uma trajetória completa de voo em ambiente de testes, foi realizado um deslocamento vertical controlado, simulando as fases de subida e descida do foguete.
 
-A **Figura 1** apresenta o monitor serial durante o ensaio.
+A **Figura 1** apresenta o monitor serial durante um dos ensaios realizados.
 
-Quando a altura máxima é atingida, o firmware identifica corretamente o apogeu, registra a mensagem correspondente e armazena o maior valor de altitude medido, que será utilizado nas próximas etapas da máquina de estados.
+Quando as condições estabelecidas pelo algoritmo são satisfeitas, o firmware identifica corretamente o apogeu, registra o evento e mantém armazenado o maior valor de altitude estimado (**max_altitude**), informação que poderá ser utilizada posteriormente pela máquina de estados e pelos módulos de armazenamento de dados.
 
 .. image:: ../images/apogeu_detection_test.jpg
-   :alt: Resultado do teste de detecção de apogeu.
+   :alt: Resultado do algoritmo de detecção de apogeu.
    :align: center
    :width: 600px
 
-**Figura 1.** Resultado do algoritmo de detecção de apogeu durante teste em bancada.
+**Figura 1.** Resultado do algoritmo de detecção de apogeu durante um teste em bancada.
 
-Os resultados demonstram que o algoritmo foi capaz de identificar corretamente o ponto de altitude máxima nas condições simuladas, validando a abordagem adotada antes da realização de testes em voo.
+Os resultados obtidos demonstram que a combinação das informações provenientes do BMP280 e do MPU6050 foi capaz de identificar corretamente o ponto de altitude máxima nas condições simuladas, validando a abordagem adotada antes da realização dos primeiros testes em voo.
 
 Limitações Atuais
 -----------------
 
-A implementação atual foi validada apenas em ensaios realizados em bancada, utilizando deslocamentos controlados para simular a trajetória do foguete e sem os outros 2x barômetros que serão utilizados no projeto final.
+Nesta etapa, o algoritmo foi validado apenas em ensaios realizados em bancada utilizando um único sensor BMP280 e um MPU6050.
 
-Os limiares empregados pelo algoritmo foram definidos experimentalmente e poderão ser refinados após os primeiros testes em voo, quando será possível avaliar o comportamento do sistema em condições reais de operação.
+Embora os resultados tenham demonstrado o correto funcionamento do algoritmo, os limiares utilizados para a detecção do apogeu e os coeficientes empregados na estimativa da velocidade vertical foram definidos experimentalmente e poderão ser refinados após os primeiros ensaios em voo.
+
+Além disso, a arquitetura definitiva do altímetro utilizará três sensores barométricos operando em conjunto. A implementação desse sistema de fusão de sensores é apresentada na subentrega **Filtros_Barômetros**, permitindo aumentar a robustez das estimativas de altitude empregadas pelo algoritmo de navegação.
+
+Conclusão
+---------
+
+Ao final desta etapa foi desenvolvida a primeira versão funcional do algoritmo de detecção automática do apogeu do foguete.
+
+Foram implementados os módulos responsáveis pela aquisição dos sensores, calibração inicial, filtragem das medições, estimação da altitude e da velocidade vertical, além da identificação automática do ponto de altitude máxima.
+
+A utilização de uma arquitetura baseada em tarefas do FreeRTOS permitiu separar o processamento dos sensores da transmissão serial, preservando a frequência de execução do algoritmo e facilitando sua integração com os demais módulos do firmware.
+
+Os resultados obtidos em bancada demonstraram o correto funcionamento da solução proposta, estabelecendo uma base sólida para as próximas etapas do projeto, que incluem a integração completa com a máquina de estados, armazenamento permanente dos dados e validação do sistema em ensaios de voo.
 
 Referências
 -----------
@@ -257,11 +327,13 @@ Referências
 
 [2] `Documentação FreeRTOS <https://www.freertos.org/Documentation/RTOS_book.html>`_
 
-[3] `Documentação I2C ESP32 <https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/peripherals/i2c.html>`_
+[3] `Documentação I²C ESP32 <https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/peripherals/i2c.html>`_
 
 [4] `Exemplos ESP-IDF Espressif <https://github.com/espressif/esp-idf/tree/master/examples>`_
 
 [5] `Datasheet BMP280 <https://www.bosch-sensortec.com/products/environmental-sensors/pressure-sensors/bmp280/>`_
 
 [6] `Datasheet MPU6050 <https://invensense.tdk.com/products/motion-tracking/6-axis/mpu-6050/>`_
+
+
 
