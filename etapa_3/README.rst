@@ -6,84 +6,90 @@ Etapa 3
    :depth: 2
 
 
-Visão geral
+Visão Geral
 ***********
 
-A Etapa 3 teve como objetivo desenvolver os primeiros algoritmos de processamento dos dados dos sensores, revisar o projeto eletrônico da placa e realizar a integração inicial entre os módulos de hardware e software.
+A Etapa 3 concentrou-se no desenvolvimento dos principais módulos de software do altímetro e na revisão do projeto eletrônico da placa, estabelecendo a base necessária para a integração completa do sistema nas etapas seguintes.
 
-As atividades desenvolvidas nesta etapa foram:
+Até a conclusão da Etapa 2, os periféricos haviam sido validados individualmente. Nesta etapa, o foco passou a ser o desenvolvimento de algoritmos capazes de processar as informações provenientes dos sensores, revisar o hardware e estruturar a arquitetura inicial do firmware.
 
-* Implementação da estimativa inicial de altitude com filtragem;
-* Desenvolvimento do algoritmo de detecção de lançamento e apogeu;
-* Revisão do esquemático e do layout preliminar da PCB;
-* Primeira integração entre os módulos do sistema.
+As principais atividades desenvolvidas foram:
 
-Essas atividades representam a transição entre os testes individuais dos periféricos, realizados na etapa anterior, e o desenvolvimento de um sistema embarcado integrado capaz de interpretar os dados dos sensores e tomar decisões durante o voo.
+* desenvolvimento do algoritmo de detecção de apogeu;
+* desenvolvimento do algoritmo de filtragem das leituras dos três barômetros;
+* revisão do esquemático e do layout preliminar da placa de circuito impresso (PCB);
+* desenvolvimento da primeira versão da arquitetura de integração utilizando máquina de estados.
+
+Cada uma dessas atividades foi desenvolvida e validada individualmente, permitindo verificar o funcionamento de cada módulo antes da integração completa do sistema, prevista para a próxima etapa do projeto.
 
 Desenvolvimento
 ***************
 
-O primeiro algoritmo implementado nesta etapa foi responsável pela estimativa da altitude do foguete.
+Nesta etapa, o projeto foi dividido em quatro frentes de desenvolvimento independentes, cada uma responsável por validar uma funcionalidade específica do altímetro. Essa estratégia permitiu que os algoritmos e o projeto eletrônico fossem desenvolvidos separadamente, reduzindo a complexidade durante a fase de implementação e facilitando a validação individual de cada módulo.
 
-A altitude não é medida diretamente pelos sensores, sendo estimada a partir da pressão atmosférica obtida pelos três barômetros utilizando a equação barométrica. Para isso, a pressão medida antes do lançamento é utilizada como pressão de referência, permitindo calcular a altitude relativa durante o voo.
+A Tabela 1 apresenta um resumo das atividades desenvolvidas nesta etapa.
 
-Como as leituras dos sensores estão sujeitas a ruídos e pequenas oscilações, foi implementado um filtro simples baseado em média móvel e atribuição de pesos aos diferentes barômetros. Além disso, leituras discrepantes são descartadas antes da composição da estimativa final, aumentando a confiabilidade do sistema.
++----------------------+------------------------------------------------------+
+| Subprojeto           | Objetivo                                             |
++======================+======================================================+
+| Detecção de Apogeu   | Desenvolver e validar o algoritmo responsável pela   |
+|                      | identificação do apogeu do foguete.                  |
++----------------------+------------------------------------------------------+
+| Filtro dos           | Desenvolver o algoritmo de filtragem das leituras    |
+| Barômetros           | provenientes dos três sensores BMP280.               |
++----------------------+------------------------------------------------------+
+| Projeto da PCB       | Revisar o esquemático, layout e circuito de          |
+|                      | alimentação da placa eletrônica.                     |
++----------------------+------------------------------------------------------+
+| Integração V1        | Desenvolver a arquitetura inicial baseada em         |
+|                      | máquina de estados utilizando dados simulados.       |
++----------------------+------------------------------------------------------+
 
-Após a implementação da estimativa de altitude, iniciou-se o desenvolvimento do algoritmo de detecção do lançamento e do apogeu do foguete.
+Tabela 1 – Resumo dos subprojetos desenvolvidos na Etapa 3.
 
-Esse algoritmo combina informações provenientes do acelerômetro e dos barômetros para identificar automaticamente as diferentes fases do voo. A utilização conjunta desses sensores aumenta a robustez da detecção quando comparada ao uso de apenas um sensor.
+Embora todos esses módulos façam parte do mesmo sistema, eles ainda não compartilham informações entre si nesta etapa. Cada subprojeto possui implementação própria e foi desenvolvido de forma independente, permitindo validar sua funcionalidade antes da integração completa do firmware.
 
-Os detalhes da implementação podem ser encontrados na documentação específica da **Detecção de Apogeu**.
-
-Paralelamente ao desenvolvimento do firmware, foi realizada uma revisão completa do projeto eletrônico da placa.
-
-Durante essa revisão foi identificado que o servomotor SG90 não pode ser alimentado diretamente pela bateria LiPo 2S, cuja tensão varia aproximadamente entre 6,6 V e 8,4 V durante sua operação. Assim, tornou-se necessária a inclusão de um circuito de conversão de tensão para garantir que o servo opere dentro da faixa especificada pelo fabricante.
-
-Também foram realizados ajustes no esquemático, revisão dos footprints dos módulos utilizados e adequações no layout da PCB antes da fabricação da primeira versão da placa.
+Nas seções seguintes é apresentada uma breve descrição de cada módulo desenvolvido. Os detalhes de implementação, funcionamento e resultados obtidos encontram-se em suas respectivas documentações.
 
 Detecção de Apogeu
 ==================
 
-Nesta etapa foi implementada a primeira versão do algoritmo de detecção de apogeu.
+Durante esta etapa, o foco concentrou-se exclusivamente na implementação e validação do algoritmo, sem integração com os demais módulos do projeto. Dessa forma, sua avaliação ocorreu de maneira independente, permitindo analisar o comportamento da lógica de detecção antes da integração completa do firmware.
 
-O algoritmo utiliza informações provenientes do acelerômetro e dos barômetros para identificar automaticamente o instante em que o foguete atinge sua altitude máxima. Essa informação será utilizada nas etapas seguintes para o acionamento do sistema de recuperação.
-
-A documentação completa da implementação pode ser acessada no link abaixo.
+A documentação específica apresenta a fundamentação teórica, o funcionamento do algoritmo, o fluxo de processamento e os critérios utilizados para identificação do apogeu.
 
 `Detecção de Apogeu <deteccao_apogeu>`_
 
 Filtro dos Barômetros
 =====================
 
-Foi desenvolvido um algoritmo de filtragem para reduzir oscilações nas leituras dos barômetros e melhorar a estimativa de altitude.
+Assim como os demais módulos desta etapa, o algoritmo foi desenvolvido e validado de forma independente, tendo como objetivo avaliar sua capacidade de produzir uma estimativa mais estável da pressão utilizada posteriormente para o cálculo da altitude.
 
-O filtro realiza a combinação das medições provenientes dos três sensores, reduzindo a influência de leituras discrepantes e aumentando a estabilidade da altitude estimada.
-
-Os detalhes da implementação encontram-se na documentação específica.
+Os detalhes do algoritmo de filtragem, bem como sua implementação e resultados experimentais, encontram-se na documentação específica.
 
 `Filtro dos Barômetros <filtro_barometros>`_
 
-Esquemático e Layout da PCB
-===========================
+Projeto da PCB
+==============
 
-Durante esta etapa foi realizada uma revisão completa do projeto eletrônico da placa.
+Além do desenvolvimento dos algoritmos de software, esta etapa contemplou a revisão do projeto eletrônico da placa de circuito impresso, buscando identificar melhorias antes da fabricação da primeira versão do hardware.
 
-Foram efetuadas correções no esquemático, ajustes de layout e modificações no circuito de alimentação, incluindo a adição de um conversor de tensão para alimentação adequada do servomotor.
+As atividades realizadas incluíram a revisão do esquemático elétrico, a verificação dos footprints utilizados, ajustes no posicionamento dos componentes e adequações no circuito de alimentação da placa.
 
-O projeto completo da PCB, incluindo arquivos do KiCad, esquemáticos em PDF e imagens do layout, encontra-se disponível no link abaixo.
+Durante essa revisão foi identificado que o servomotor SG90 não poderia ser alimentado diretamente pela bateria LiPo 2S utilizada no projeto. Embora o servo suporte tensões de até aproximadamente 6 V, a bateria pode atingir cerca de 8,4 V quando totalmente carregada. Dessa forma, foi necessária a inclusão de um conversor de tensão dedicado para garantir que o componente opere dentro das especificações do fabricante e aumentar a confiabilidade do sistema.
+
+A documentação específica apresenta todas as modificações realizadas, bem como os arquivos do projeto desenvolvidos no KiCad.
 
 `Projeto da PCB <PCB>`_
 
 Integração V1
 =============
 
-A primeira etapa de integração teve como objetivo validar a comunicação entre os módulos de software desenvolvidos até o momento.
+Nesta etapa, a integração teve como finalidade verificar o funcionamento da máquina de estados, a organização das tarefas e a comunicação entre os módulos presentes nesse ambiente de testes. Como os algoritmos de detecção de apogeu e filtragem dos barômetros ainda estavam sendo desenvolvidos de forma independente, foram utilizados dados simulados representando um perfil típico de voo para validar o comportamento da aplicação.
 
-Nessa versão foram integrados o algoritmo de estimativa de altitude, o algoritmo de detecção de apogeu e a máquina de estados desenvolvida com o Itemis Create, utilizando o FreeRTOS como sistema operacional de tempo real para gerenciamento das tarefas do sistema.
+Essa abordagem permitiu avaliar a estrutura inicial do firmware antes da integração dos algoritmos desenvolvidos nos demais subprojetos, atividade prevista para a etapa seguinte.
 
-Como os sensores físicos ainda não estavam completamente integrados, foram utilizados dados simulados que reproduzem o comportamento esperado durante um voo, permitindo validar a comunicação entre os módulos e a lógica geral do firmware.
-
-Os códigos utilizados durante os testes de integração podem ser acessados no link abaixo.
+A documentação específica descreve a arquitetura implementada, a organização das tarefas e o funcionamento da máquina de estados utilizada durante os testes.
 
 `Integração V1 <Integracao_V1>`_
 
@@ -94,12 +100,12 @@ Referências
 
 [2] `Tutorial Itemis Create <https://www.itemis.com/en/products/itemis-create/documentation/tutorials>`_
 
-[3] `Documentação Espressif <https://docs.espressif.com/projects/esp-idf/en/latest/esp32/>`_
+[3] `Documentação ESP-IDF <https://docs.espressif.com/projects/esp-idf/en/latest/esp32/>`_
 
 [4] `Documentação LEDC (ESP-IDF) <https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/peripherals/ledc.html>`_
 
 [5] `Documentação I2C (ESP-IDF) <https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/peripherals/i2c.html>`_
 
-[6] `Exemplos ESP-IDF Espressif <https://github.com/espressif/esp-idf/tree/master/examples>`_
+[6] `Exemplos ESP-IDF <https://github.com/espressif/esp-idf/tree/master/examples>`_
 
 [7] `ESP32 as I2C Master <https://www.youtube.com/watch?v=Snp6iTu1R7E>`_
