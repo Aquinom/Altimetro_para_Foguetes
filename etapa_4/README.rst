@@ -6,49 +6,89 @@ Etapa 4
    :depth: 2
 
 
-Visão geral
+Visão Geral
 ***********
 
-A Etapa 4 tem como objetivo realizar os testes e as validações em campo do
-sistema embarcado, verificando o funcionamento integrado dos sensores,
-atuadores e demais componentes utilizados no foguete.
+A Etapa 4 teve como objetivo realizar a validação experimental do altímetro desenvolvido ao longo do projeto, por meio de testes em campo e da consolidação da versão final do hardware.
 
-Nesta etapa, serão realizados testes para validar a detecção da queda por
-meio do acelerômetro, a medição de altitude utilizando os barômetros, a
-abertura do paraquedas por meio do servomotor e a emissão do sinal sonoro
-pelo buzzer após a aterrissagem.
+Os objetivos previstos para esta etapa foram:
 
-Além dos testes funcionais, esta etapa contempla a finalização do esquemático
-elétrico e do layout da placa de circuito impresso. Por fim, a PCB será
-montada e validada, garantindo que o sistema esteja apto para as etapas finais
-do projeto.
+* testes e validações em campo da detecção de queda utilizando o acelerômetro;
+* testes e validações em campo da estimativa de altitude utilizando os barômetros;
+* testes e validações em campo do acionamento do sistema de recuperação por meio do servomotor;
+* testes e validações em campo da sinalização sonora utilizando o buzzer após a aterrissagem;
+* finalização do esquemático elétrico e do layout da PCB;
+* montagem e validação da placa de circuito impresso.
 
+Durante o desenvolvimento da etapa, o firmware integrado foi concluído e a primeira versão da PCB foi fabricada e montada. Entretanto, durante os testes iniciais foi identificado um defeito na placa, impossibilitando a realização dos ensaios em campo previstos para validação completa do sistema.
 
 Desenvolvimento
 ***************
 
-Apresentar o desenvolvimento da etapa contendo detalhes de implementação (se houver) de hardware e software. Adicionar pesqusisas realizadas bem como testes realizados.
+Nesta etapa foi concluída a integração do firmware desenvolvido ao longo do projeto, reunindo os módulos responsáveis pela aquisição dos sensores, processamento dos dados, detecção de apogeu e gerenciamento da máquina de estados em uma única aplicação embarcada.
 
+Paralelamente ao desenvolvimento do software, foi finalizado o projeto eletrônico da placa de circuito impresso, incluindo o esquemático definitivo, o layout e a montagem da primeira versão da PCB.
 
-Testes
-======
+As seções a seguir apresentam uma visão geral dos principais resultados obtidos nesta etapa. Os detalhes de implementação encontram-se nas documentações específicas.
 
-Descrição dos testes/validações realizadas.
+Código Final
+============
 
+O firmware desenvolvido nesta etapa representa a versão integrada do sistema embarcado do altímetro.
 
-(Outras subseções se necessário)
-================================
+Sua documentação apresenta a arquitetura completa do software, a organização dos módulos, a estrutura do projeto e o funcionamento dos principais componentes responsáveis pela aquisição dos sensores, processamento das informações e gerenciamento da aplicação.
 
+Os detalhes completos do firmware podem ser consultados na documentação específica.
 
-Referências (links/datasheets/livros)
-*************************************
+`Código Final <cod_final>`_
 
-- `Tutorial I2C ESP32 <https://microcontrollerslab.com/esp32-i2c-communication-tutorial-arduino-ide>`_
-- `Tutorial Itemis Create <https://www.itemis.com/en/products/itemis-create/documentation/tutorials>`_
-- `Documentação Espressif <https://docs.espressif.com/projects/esp-idf/en/latest/esp32/>`_
-- `Documentação LED-C utilizado para programar o SG90 <https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/peripherals/ledc.html>`_
-- `Documentação I2C utilizado para programar o MPU6050 <https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/peripherals/i2c.html>`_
-- `Exemplos de programação ESP32 Espressif <https://github.com/espressif/esp-idf/tree/master/examples>`_
-- `ESP32 as I2C Master <https://www.youtube.com/watch?v=Snp6iTu1R7E>`_
+PCB
+===
 
+Nesta etapa também foi concluído o desenvolvimento da versão final da placa de circuito impresso do altímetro.
 
+A documentação correspondente apresenta o esquemático final, o layout da PCB, imagens da placa montada e as principais decisões adotadas durante o desenvolvimento do hardware.
+
+Os detalhes do projeto eletrônico encontram-se na documentação específica.
+
+`Projeto da PCB <PCB>`_
+
+Testes e Validações
+==================
+
+Os testes previstos para esta etapa incluíam a validação em campo do funcionamento integrado do sistema, contemplando:
+
+* detecção da queda por meio do acelerômetro;
+* estimativa de altitude utilizando os três barômetros;
+* acionamento do sistema de recuperação por meio do servomotor;
+* sinalização sonora utilizando o buzzer após a aterrissagem.
+
+Antes da montagem da placa de circuito impresso, foram realizados testes em bancada utilizando uma montagem em protoboard contendo todos os componentes do sistema. Esses ensaios demonstraram o funcionamento integrado do firmware e validaram a comunicação entre os sensores, atuadores e os algoritmos desenvolvidos ao longo do projeto.
+
+Entretanto, durante a montagem e os testes iniciais da primeira versão da PCB foi identificado um defeito de hardware que comprometeu o funcionamento da placa. Em razão desse problema, não foi possível realizar os testes em campo previstos para esta etapa.
+
+Para mais detalhes sobre os problemas encontrados durante a fabricação da PCB favor referir a `PCB <PCB>`_.
+
+Considerações Finais
+********************
+
+A Etapa 4 consolidou o desenvolvimento do firmware e do hardware do altímetro, resultando na integração completa dos módulos de software e na fabricação da primeira versão da PCB.
+
+Os testes em bancada realizados com o sistema montado em protoboard demonstraram o funcionamento integrado do firmware e validaram os principais recursos desenvolvidos durante o projeto. Contudo, um defeito identificado na versão da PCB impossibilitou a realização dos ensaios em campo previstos para esta etapa.
+
+Apesar dessa limitação, o projeto atingiu seu principal objetivo de integração do hardware e do software, ficando a validação em condições reais condicionada à correção da placa de circuito impresso.
+
+Referências
+***********
+
+[1] `Documentação ESP-IDF <https://docs.espressif.com/projects/esp-idf/en/latest/esp32/>`_
+
+[2] `Documentação FreeRTOS <https://www.freertos.org/>`_
+
+[3] `Documentação Itemis Create <https://www.itemis.com/en/products/itemis-create/documentation>`_
+
+[4] `Datasheet BMP280 <https://cdn-shop.adafruit.com/datasheets/BST-BMP280-DS001-11.pdf>`_
+
+[5] `Datasheet MPU6050 <https://cdn.sparkfun.com/datasheets/Sensors/Accelerometers/RM-MPU-6000A.pdf>`_
+
+[6] `ESP32 Technical Reference Manual <https://www.espressif.com/sites/default/files/documentation/esp32_technical_reference_manual_en.pdf>`_
