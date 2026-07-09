@@ -14,7 +14,8 @@ Este projeto foi implementado com os seguintes módulos/softwares/hardwares...
 
 - Medir a altura máxima do foguete;
 - Acionar o paraquedas quando o foguete começar a descer;
-- Ativação do buzzer após pouso.
+- Ativação do buzzer após pouso;
+- Armazenanto do último valor mais alto de altitude do foguete.
 
 
 Visão geral
@@ -24,7 +25,7 @@ Este projeto tem como objetivo desenvolver um módulo do sistema de telemetria p
 
 A proposta é implementar funcionalidades essenciais para o monitoramento do voo e recuperação do foguete, incluindo:
 
-- Medição da altitude máxima atingida;
+- Medição e armazenamento da altitude máxima atingida;
 - Acionamento automático do paraquedas;
 - Ativação de um buzzer após o pouso para facilitar a localização.
 
