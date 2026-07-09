@@ -15,7 +15,7 @@ Além da integração dos componentes, buscou-se organizar o posicionamento dos 
 Visão Geral
 ***********
 
-Após a definição dos componentes eletrônicos utilizados no projeto, iniciou-se o desenvolvimento da PCB utilizando o software EasyEDA.
+Após a definição dos componentes eletrônicos utilizados no projeto, iniciou-se o desenvolvimento da PCB utilizando o software KiCAD 10.
 
 A placa foi projetada para concentrar todos os principais módulos do sistema embarcado, reduzindo a quantidade de cabos entre os componentes e aumentando a confiabilidade das conexões durante o voo do foguete.
 
