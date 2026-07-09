@@ -269,28 +269,28 @@ A Figura 4 apresenta o fluxo simplificado de execução do firmware.
 
 ::
 
-init_task()
-      │
-      ▼
-acquire_task
-      │
-      ▼
-Leitura dos sensores
-      │
-      ▼
-Filtro de Kalman
-      │
-      ▼
-g_flight_data
-      │
-      ▼
-flight_task
-      │
-      ▼
-Detecção de Apogeu
-      │
-      ▼
-g_flight_status
+         init_task()
+            │
+            ▼
+         acquire_task
+            │
+            ▼
+         Leitura dos sensores
+            │
+            ▼
+         Filtro de Kalman
+            │
+            ▼
+         g_flight_data
+            │
+            ▼
+         flight_task
+            │
+            ▼
+         Detecção de Apogeu
+            │
+            ▼
+         g_flight_status
 
 Figura 4 – Arquitetura simplificada do firmware e fluxo de informações entre os módulos.
 
