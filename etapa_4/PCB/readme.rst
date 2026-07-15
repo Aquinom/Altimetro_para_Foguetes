@@ -18,6 +18,13 @@ Furação e corte da placa
 
 A furação e o corte do contorno da PCB foram realizados utilizando uma CNC Genmitsu 3018 Pro. Todos os furos destinados aos terminais dos componentes foram produzidos com diâmetro de 1 mm, utilizando uma ferramenta com revestimento de AlTiN. O corte externo da placa foi realizado utilizando uma fresa de 3 mm, também revestida com AlTiN.
 
+.. figure:: ../images/resultado_corrosao.jpg
+   :align: center
+   :width: 700px
+   :alt: Resultado da corrosão da PCB
+
+   Melhor resultado obtido após o processo de transferência térmica e corrosão com percloreto férrico.
+
 A sequência de fabricação adotada foi:
 
 #. realização dos furos passantes;
@@ -143,7 +150,10 @@ Conectores externos
 
 Foi utilizado um conector de duas vias para a entrada de alimentação proveniente da bateria.
 
-Também foram instalados dois conectores de três vias. Um deles foi destinado à conexão do buzzer e o outro à conexão do servo motor. Esses conectores facilitaram a montagem, a remoção e a substituição desses dispositivos durante os testes.
+Também foram instalados dois conectores de três vias. Um deles foi destinado à conexão do buzzer e o outro à conexão do servo motor. Esses conectores facilitaram a montagem, a remoção e a substituição desses dispositivos durante os testes. 
+
+Com isso foi finalizado a placa e foi possível partir para os testes de bancada com a seguinte placa: 
+
 
 Correção em relação à PCB de dupla face
 ***********
