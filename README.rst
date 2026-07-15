@@ -127,7 +127,7 @@ Nesta etapa foram realizadas as atividades iniciais de definição do projeto, c
 * estudo dos sensores utilizados;
 * elaboração do diagrama simplificado de hardware.
 
-Para mais detalhes, acesse: `Etapa 1 - Definição do projeto <etapa_1>`_
+Para mais detalhes sobre a etapa 1, acesse: `Etapa 1 - Definição do projeto <etapa_1>`_
 
 Etapa 2 — Desenvolvimento dos Periféricos
 =========================================
@@ -141,7 +141,7 @@ Nesta etapa foram implementados e validados os principais periféricos utilizado
 * desenvolvimento do esquemático preliminar;
 * modelagem inicial da máquina de estados.
 
-Para mais detalhes, acesse: `Etapa 2 - Desenvolvimento dos periféricos <etapa_2>`_
+Para mais detalhes sobre a etapa 2, acesse: `Etapa 2 - Desenvolvimento dos periféricos <etapa_2>`_
 
 Etapa 3 — Integração do Firmware
 ================================
@@ -154,7 +154,7 @@ Nesta etapa foi realizada a integração entre hardware e software, contemplando
 * desenvolvimento do layout preliminar da PCB;
 * ajustes de hardware e integração do firmware.
 
-Para mais detalhes, acesse: `Etapa 3 - Integração do firmware <etapa_3>`_
+Para mais detalhes sobre a etapa 3, acesse: `Etapa 3 - Integração do firmware <etapa_3>`_
 
 Etapa 4 — Validação Final
 =========================
@@ -169,7 +169,7 @@ A etapa final contempla a integração completa do sistema e sua validação em 
 * desenvolvimento do layout final da PCB;
 * montagem e validação da placa de circuito impresso.
 
-Para mais detalhes, acesse: `Etapa 4 - Validação final <etapa_4>`_
+Para mais detalhes sobre a etapa 4, acesse: `Etapa 4 - Validação final <etapa_4>`_
 
 Arquitetura Geral do Firmware
 *****************************
