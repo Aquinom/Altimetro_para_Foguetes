@@ -20,8 +20,6 @@ Os objetivos previstos para esta etapa foram:
 * finalização do esquemático elétrico e do layout da PCB;
 * montagem e validação da placa de circuito impresso.
 
-Durante o desenvolvimento da etapa, o firmware integrado foi concluído e a primeira versão da PCB foi fabricada e montada. Entretanto, durante os testes iniciais foi identificado um defeito na placa, impossibilitando a realização dos ensaios em campo previstos para validação completa do sistema.
-
 Desenvolvimento
 ***************
 
