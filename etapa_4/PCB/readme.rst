@@ -158,7 +158,7 @@ A utilização da placa perfurada reduziu a possibilidade de contatos acidentais
 
 Referências
 ***********
-(colocar referencias melhores)
+
 [1] `Datasheet MPU6050 <https://cdn.sparkfun.com/datasheets/Sensors/Accelerometers/RM-MPU-6000A.pdf>`_
 
 [2] `Datasheet SG90 <https://www.friendlywire.com/projects/ne555-servo-safe/SG90-datasheet.pdf>`_
