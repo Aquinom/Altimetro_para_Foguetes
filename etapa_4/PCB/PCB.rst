@@ -1,5 +1,6 @@
+
 Layout Final e Fabricação da PCB
-***********
+================
 
 Após a conclusão do esquemático elétrico, foram realizados os ajustes finais no layout da placa de circuito impresso utilizando o software KiCad, versão 10.0.1. A PCB foi projetada com dimensões de 90 mm × 60 mm e estrutura de dupla face.
 
@@ -8,6 +9,9 @@ Durante essa etapa, a largura das trilhas foi aumentada de 30 mils para 60 mils.
 Também foram modificados os pinos utilizados pelos barramentos I2C do ESP32. O primeiro barramento I2C foi configurado nos pinos GPIO18 e GPIO19, enquanto o segundo barramento foi configurado nos pinos GPIO21 e GPIO22. Essa alteração permitiu uma melhor distribuição física dos sensores e das conexões no layout da placa.
 
 A face inferior da PCB foi utilizada para as trilhas de sinais e alimentação. A face superior não recebeu um layout de trilhas convencional, sendo mantida como um plano de terra contínuo. Nos pontos em que foi necessário conectar o terra das duas faces, foram confeccionadas vias manualmente utilizando pequenos segmentos de fio de cobre soldados nos dois lados da placa.
+
+Tentativas Falhas
+------------------
 
 Furação e corte da placa
 ***********
@@ -76,6 +80,80 @@ O curto-circuito foi identificado por meio do teste de continuidade com multíme
 Esse problema demonstrou que, mesmo quando uma das faces é utilizada principalmente como plano de terra, é necessário prever áreas de isolamento ao redor de todos os furos e terminais que conduzem sinais ou tensões diferentes do potencial de terra.
 
 Após os problemas encontrados na produção artesanal da placa de duas faces, decidiu-se interromper essa abordagem e realizar a montagem do circuito utilizando uma placa perfurada.
+
+Projeto em Placa Perfurada
+------------------
+
+Devido aos problemas encontrados durante a fabricação artesanal da PCB de duas faces, optou-se por montar o circuito em uma placa perfurada. Esse tipo de placa já possui os furos necessários para a inserção dos componentes e apresenta ilhas de cobre individuais, que podem ser interligadas manualmente por meio de estanho e fios.
+
+A placa utilizada possuía dimensões de 100 mm × 150 mm, com ilhas de cobre individuais presentes em apenas uma das faces. Diferentemente de uma PCB convencional, as conexões elétricas não eram previamente definidas por um layout de trilhas. Dessa forma, todas as ligações precisaram ser confeccionadas manualmente durante a montagem.
+
+Componentes utilizados
+***********
+
+A versão montada em placa perfurada utilizou os seguintes componentes:
+
+* 1 ESP32 DevKit V1;
+* 3 módulos BMP280;
+* 1 módulo MPU6050;
+* 1 buzzer;
+* 1 servo motor;
+* 2 reguladores lineares AMS1117 de 5 V;
+* 1 conector de duas vias para a bateria;
+* 2 conectores de três vias, destinados ao buzzer e ao servo motor.
+
+Não foram utilizados capacitores adicionais nessa versão da placa.
+
+O ESP32 foi instalado utilizando barras de pinos e soquetes, permitindo sua remoção da placa para manutenção, programação ou substituição. Os demais componentes foram soldados diretamente na placa perfurada.
+
+Distribuição da alimentação
+***********
+
+A alimentação do circuito foi dividida utilizando dois reguladores lineares AMS1117 com saída de 5 V.
+
+Um dos reguladores foi dedicado à alimentação do servo motor. Essa separação teve como objetivo evitar que as variações de corrente produzidas pelo acionamento do servo interferissem diretamente na alimentação do restante do circuito.
+
+O segundo regulador AMS1117 de 5 V foi conectado ao terminal `VIN` do ESP32 DevKit V1. A partir dessa alimentação, o regulador presente na própria placa do ESP32 forneceu a tensão de 3,3 V utilizada pelos sensores e pelo buzzer.
+
+Os três módulos BMP280, o módulo MPU6050 e o buzzer foram, portanto, alimentados pelo pino `3V3` do ESP32.
+
+Montagem dos componentes
+***********
+
+Inicialmente, os componentes foram posicionados sobre a placa para determinar sua distribuição física. Foram considerados o espaço ocupado por cada módulo, a distância entre os sensores, a posição dos conectores e a necessidade de acesso ao ESP32.
+
+Após a definição das posições, os componentes foram soldados gradualmente. As conexões mais curtas foram realizadas por meio de pontes de estanho entre ilhas próximas. Nas conexões mais longas, foram utilizados fios rígidos desencapados soldados sobre as ilhas de cobre.
+
+A combinação de pontes de estanho e fios rígidos permitiu realizar as conexões de alimentação, terra, comunicação I2C e sinais de controle sem a necessidade de fabricar uma nova PCB.
+
+Barramentos I2C
+***********
+
+Os sensores foram distribuídos entre dois barramentos I2C do ESP32:
+
+* barramento I2C 1 utilizando os pinos GPIO18 e GPIO19;
+* barramento I2C 2 utilizando os pinos GPIO21 e GPIO22.
+
+Não foram adicionados resistores de *pull-up* externos aos barramentos I2C. Os módulos utilizados já possuíam resistores de *pull-up* integrados em suas próprias placas.
+
+A utilização dos resistores presentes nos módulos foi considerada suficiente para os testes realizados, eliminando a necessidade de adicionar resistores externos na placa perfurada.
+
+Conectores externos
+***********
+
+Foi utilizado um conector de duas vias para a entrada de alimentação proveniente da bateria.
+
+Também foram instalados dois conectores de três vias. Um deles foi destinado à conexão do buzzer e o outro à conexão do servo motor. Esses conectores facilitaram a montagem, a remoção e a substituição desses dispositivos durante os testes.
+
+Correção em relação à PCB de dupla face
+***********
+
+Na tentativa anterior de fabricação da PCB de dupla face, o pino `VCC` do módulo MPU6050, alimentado com 3,3 V, entrou em contato com o plano de terra da face superior.
+
+Esse contato produziu um curto-circuito entre a alimentação de 3,3 V e o terra, resultando na queima do componente. Na montagem em placa perfurada, esse problema deixou de existir, pois as ilhas de cobre eram individuais e as conexões somente eram formadas nos pontos definidos durante a soldagem.
+
+A utilização da placa perfurada reduziu a possibilidade de contatos acidentais com grandes áreas de cobre. Entretanto, exigiu maior atenção durante a confecção manual das trilhas e durante a verificação de continuidade entre as conexões.
+
 
 
 Referências
