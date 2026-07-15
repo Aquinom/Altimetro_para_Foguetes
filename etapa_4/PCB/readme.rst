@@ -159,12 +159,9 @@ A utilização da placa perfurada reduziu a possibilidade de contatos acidentais
 Referências
 ***********
 
-[1] `Datasheet MPU6050 <https://cdn.sparkfun.com/datasheets/Sensors/Accelerometers/RM-MPU-6000A.pdf>`_
+[1] `Como Fazer Uma Placa de Circuito Impresso <https://www.makerhero.com/blog/como-fazer-uma-placa-de-circuito-impresso/?srsltid=AfmBOoq9PHDq28KOMhjLHJR5aB-tPYMs04hCTK7Y8jLSqjGnmJ_Kt3h7>`_
 
-[2] `Datasheet SG90 <https://www.friendlywire.com/projects/ne555-servo-safe/SG90-datasheet.pdf>`_
+[2] `Tutorial Confecção PCB <http://paginapessoal.utfpr.edu.br/amauriassef/disciplinas/sistemas-microcontrolados/material-de-apoio/TUTORIAL_Confeccao_PCB.pdf>`_
 
-[3] `Datasheet BMP280 <https://cdn-shop.adafruit.com/datasheets/BST-BMP280-DS001-11.pdf>`_
-
-[4] `Datasheet ESP32 <https://documentation.espressif.com/esp32_datasheet_en.pdf>`_
-
+[3] `Como Soldar Componentes Eletrônicos <https://www.makerhero.com/blog/como-soldar-componentes-eletronicos/?srsltid=AfmBOoqxPfLLLJ7VHduqNXVbuU8eBdP55BjqBfLxHE18ruWYvKUPKNgC>`_
 
