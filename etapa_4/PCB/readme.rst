@@ -18,9 +18,9 @@ Furação e corte da placa
 
 A furação e o corte do contorno da PCB foram realizados utilizando uma CNC Genmitsu 3018 Pro. Todos os furos destinados aos terminais dos componentes foram produzidos com diâmetro de 1 mm, utilizando uma ferramenta com revestimento de AlTiN. O corte externo da placa foi realizado utilizando uma fresa de 3 mm, também revestida com AlTiN.
 
-.. figure:: ../images/resultado_corrosao.jpg
+.. figure:: ../images/28fcc336-d403-402e-89cd-9860ed53441a.png
    :align: center
-   :width: 700px
+   :width: 500px
    :alt: Resultado da corrosão da PCB
 
    Melhor resultado obtido após o processo de transferência térmica e corrosão com percloreto férrico.
