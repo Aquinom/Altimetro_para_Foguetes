@@ -65,7 +65,11 @@ Os testes previstos para esta etapa incluíam a validação em campo do funciona
 
 Antes da montagem da placa de circuito impresso, foram realizados testes em bancada utilizando uma montagem em protoboard contendo todos os componentes do sistema. Esses ensaios demonstraram o funcionamento integrado do firmware e validaram a comunicação entre os sensores, atuadores e os algoritmos desenvolvidos ao longo do projeto.
 
-Entretanto, durante a montagem e os testes iniciais da primeira versão da PCB foi identificado um defeito de hardware que comprometeu o funcionamento da placa. Em razão desse problema, não foi possível realizar os testes em campo previstos para esta etapa.
+Entretanto, durante a montagem e os testes iniciais da primeira versão da PCB foi identificado um defeito de hardware que comprometeu o funcionamento da placa. Em razão desse problema, Foi utilizado uma placa de fenolite perfurada, para tentar efetuar as correções necessárias, e assim, fazer a validação de campo necessária.
+
+Para a placa em questão algumas questões foram alteradas. O Buzzer e os sensores passaram a ser alimentados pelo próprio ESP, enquanto o servo e o ESP foram alimentados diretamente por uma bateria que passava por um regulador de tensão de 5V.
+
+Após efetuadas as devidas mudanças, o teste de validação de campo foi efetuado, e obteve o resultado esperado.
 
 Para mais detalhes sobre os problemas encontrados durante a fabricação da PCB favor referir a `PCB <PCB>`_.
 
@@ -74,9 +78,7 @@ Considerações Finais
 
 A Etapa 4 consolidou o desenvolvimento do firmware e do hardware do altímetro, resultando na integração completa dos módulos de software e na fabricação da primeira versão da PCB.
 
-Os testes em bancada realizados com o sistema montado em protoboard demonstraram o funcionamento integrado do firmware e validaram os principais recursos desenvolvidos durante o projeto. Contudo, um defeito identificado na versão da PCB impossibilitou a realização dos ensaios em campo previstos para esta etapa.
-
-Apesar dessa limitação, o projeto atingiu seu principal objetivo de integração do hardware e do software, ficando a validação em condições reais condicionada à correção da placa de circuito impresso.
+Os testes em bancada somados com as validações de campo provaram a efetividade do nosso projeto, que foi capaz de realizar todas as funções que eram requisitos de projeto, como detectar pico, abrir o paraquedas, salvar a altitude máxima em memória não-volátil e beeps continuos do buzzer no seu estágio final.
 
 Referências
 ***********
