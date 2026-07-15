@@ -71,6 +71,16 @@ Após efetuadas as devidas mudanças, o teste de validação de campo foi efetua
 
 Para mais detalhes sobre os problemas encontrados durante a fabricação da PCB favor referir a `PCB <PCB>`_.
 
+Pinagem do Hardware
+===================
+
+A figura abaixo apresenta a pinagem utilizada no hardware do altímetro de foguete. O projeto utiliza dois barramentos I²C independentes: um dedicado ao acelerômetro MPU6050 e a um sensor barométrico BMP280, e outro compartilhado pelos dois BMP280 restantes. Além disso, foram reservados GPIOs específicos para o acionamento do servo motor e do buzzer.
+
+.. image:: images/pinagem.png
+   :alt: Pinagem do ESP32 utilizada no projeto do altímetro de foguete
+   :align: center
+   :width: 90%
+
 Considerações Finais
 ********************
 
